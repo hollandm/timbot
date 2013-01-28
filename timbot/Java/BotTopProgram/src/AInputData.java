@@ -1,6 +1,19 @@
 
+
+/**
+ * 
+ * AInputData
+ * 
+ * Data structure / thread for capturing and storing data from 
+ * the arduino.
+ * 
+ * @author Matt Delaney, Matt Holland
+ *
+ */
 public class AInputData implements Runnable {
 	
+	// IR values are in CENTIMETERS.
+	// Accurate from 30cm to 150cm.
 	private float irFront = 0;
 	private float irBack = 0;
 	private float irLeft = 0;
@@ -10,9 +23,24 @@ public class AInputData implements Runnable {
 	private float potArm = 0;
 	
 	private float gyroYaw = 0;
+	private float gyroPitch = 0;
+	
+	//TODO: Gyro values might be more useful in another unit?
 	
 	private boolean eStop = false;
 	
+	
+	/* Raw Sensor Input Values */
+	private float m_irFrontRaw = 0;
+	private float m_irBackRaw = 0;
+	private float m_irLeftRaw = 0;
+	private float m_irRightRaw = 0;
+	
+	private float m_potBucketRaw = 0;
+	private float m_potArmRaw = 0;
+	
+	private float m_gyroYawRaw = 0;
+	private float m_gyroPitchRaw = 0;
 	/**
 	 * gets the value of front ir sensor
 	 * @return
@@ -84,10 +112,44 @@ public class AInputData implements Runnable {
 	}
 	
 	/**
+	 * gets the value of gyroPitch
+	 * @return
+	 */
+	public float getGyroPitch() {
+		synchronized (this) {
+			return gyroPitch;
+		}
+	}
+	
+	/**
 	 * reads data from the arduino
 	 */
-	public void getData() {}
+	public void getData() {
+		// TODO: GET DATA. Store to m_*Raw variables.
+		
+		
+		convertData();
+	}
 
+
+	/**
+	 * converts raw data into usable information.
+	 */
+private void convertData() {
+		synchronized(this){
+			// convert IR sensor data to Centimeters:
+			irLeft = (400 / m_irLeftRaw *33);
+			irRight = (400 / m_irRightRaw *33);
+			irFront = (400 / m_irFrontRaw *33);
+			irBack = (400 / m_irBackRaw *33);
+			
+			// TODO convert Gyro values to usable data
+			
+			// TODO convert bucketRaw and potArmRaw to usable data (cm)
+			
+		}//synchronized
+		
+	}
 
 	@Override
 	public void run() {
