@@ -89,7 +89,8 @@ public class SerialTest implements SerialPortEventListener {
 	 */
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
 		
-//		byte[] send = new byte[7];
+		/*
+		byte[] send = new byte[7];
 //		send[0] = 67;
 //		send[1] = 12;
 //		send[2] = 55;
@@ -98,21 +99,12 @@ public class SerialTest implements SerialPortEventListener {
 //		send[5] = 12;
 //		send[6] = 55;
 //		output.write(send);
-		
-		byte[] test = new byte[4];
-		test[0] = 47;
-		test[1] = 20;
-		
-		
 		try {
-//			Thread.sleep(2000);
-			output.write('G');
-//			output.write(test);
-		} catch (Exception e) {
+			Thread.sleep(2000);
+		} catch (InterruptedException e2) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e2.printStackTrace();
 		}
-		/*
 		try {
 			output.write(67);
 		} catch (IOException e1) {
@@ -131,32 +123,48 @@ public class SerialTest implements SerialPortEventListener {
 		// Ignore all the other eventTypes, but you should consider the other ones.
 	}
 
-	public static void main(String[] args) throws Exception {
-		SerialTest main = new SerialTest();
-		main.initialize();
-		Thread t=new Thread() {
-			public void run() {
-				//the following line will keep this app alive for 1000 seconds,
-				//waiting for events to occur and responding to them (printing incoming messages to console).
-				try {Thread.sleep(1000000);} catch (InterruptedException ie) {}
-				
-//				try
-//	            {                
-//	                int c = 0;
-//	                while ( ( c = System.in.read()) > -1 )
-//	                {
-//	                    this.out.write(c);
-//	                }                
-//	            }
-//	            catch ( IOException e )
-//	            {
-//	                e.printStackTrace();
-//	            }      
-				
-			}
-		};
-		t.start();
-		System.out.println("Started");
-		
-	}
+//	public static void main(String[] args) throws Exception {
+//		SerialTest main = new SerialTest();
+//		main.initialize();
+//		
+//		System.out.println("Started");
+//		Thread.sleep(2000);
+//
+//		System.out.println("Waited");
+//		main.output.write('G');
+//		Thread.sleep(500);
+//
+//		main.output.write('.');
+//		
+//
+//		System.out.println("Wrote");
+//		main.close();
+//		System.exit(0);
+//		/*
+//		Thread t=new Thread() {
+//			public void run() {
+//				//the following line will keep this app alive for 1000 seconds,
+//				//waiting for events to occur and responding to them (printing incoming messages to console).
+//				try {Thread.sleep(1000000);} catch (InterruptedException ie) {}
+//				
+////				try
+////	            {                
+////	                int c = 0;
+////	                while ( ( c = System.in.read()) > -1 )
+////	                {
+////	                    this.out.write(c);
+////	                }                
+////	            }
+////	            catch ( IOException e )
+////	            {
+////	                e.printStackTrace();
+////	            }      
+//				
+//			}
+//		};
+//		t.start();
+//		*/
+////		System.out.println("Started");
+//		
+//	}
 }
