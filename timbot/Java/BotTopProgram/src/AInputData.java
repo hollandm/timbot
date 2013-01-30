@@ -144,8 +144,9 @@ private void convertData() {
 			irBack = (400 / m_irBackRaw *33);
 			
 			// TODO convert Gyro values to usable data
-			
+		
 			// TODO convert bucketRaw and potArmRaw to usable data (cm)
+
 			
 		}//synchronized
 		

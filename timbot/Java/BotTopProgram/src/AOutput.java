@@ -1,4 +1,12 @@
 
+/**
+ * AOutput
+ * 
+ * The .java file that sends all output signals to the arduino.
+ * @author 
+ *
+ */
+
 public class AOutput {
 
 	/**
