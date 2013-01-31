@@ -91,9 +91,11 @@ public class TwoWaySerialComm
                 {
                 	if (c != '\n') {
                         this.out.write(Character.toUpperCase(c));
+                        System.out.print(Character.toUpperCase(c)+" ");
                     //    this.out.write(0x04);
                 	} else {
                 		this.out.write(' ');
+                		System.out.print('_');
 //                		this.out.write('\n');
                 	}
                 }                
@@ -109,7 +111,7 @@ public class TwoWaySerialComm
     {
         try
         {
-            (new TwoWaySerialComm()).connect("COM5");
+            (new TwoWaySerialComm()).connect("COM9");
             
         }
         catch ( Exception e )
