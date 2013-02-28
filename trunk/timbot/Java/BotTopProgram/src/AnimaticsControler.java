@@ -84,7 +84,7 @@ public class AnimaticsControler {
 		{
 			e.printStackTrace();
 		}
-		System.out.println(in);
+//		System.out.println(in);
 
 	}
 	

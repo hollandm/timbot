@@ -89,7 +89,7 @@ public class RXTX_PROGRAM {
 			writeString("MV");
 			writeString("EIGN(2)");
 			writeString("EIGN(3)");
-			writeString("ADT"+acc);
+			writeString("ADT="+acc);
 			writeString("VT="+vel);
 		//	writeString("PRT="+pos);
 			writeString("G");
