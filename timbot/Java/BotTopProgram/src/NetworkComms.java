@@ -27,17 +27,22 @@ public class NetworkComms implements Runnable {
 	}
 
 	public static void main(String args[]) throws IOException, InterruptedException {
-
+		
 		AnimaticsControler MotorControler = new AnimaticsControler();
 		try {
 			MotorControler.connect("COM4");
+			MotorControler.writeString("ZS"); 
+			MotorControler.writeString("MV");
+			MotorControler.writeString("EIGN(2)");
+			MotorControler.writeString("EIGN(3)");
+			MotorControler.writeString("ADT="+10000);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		System.out.println("Started");
+		
 		byte[] dataIN = new byte[7];
 		
 		MulticastSocket in = new MulticastSocket(6000);
@@ -46,17 +51,16 @@ public class NetworkComms implements Runnable {
 		InetAddress add = InetAddress.getByName("224.0.0.1");
 		in.joinGroup(add);
 		
+		System.out.println("Listening to traffic");
 		
 		while (true) {
 			in.receive(recv);
 			
-			String speed = "VT="+dataIN[1];
+			String speed = "VT="+(dataIN[0]-50)*2000;
 			MotorControler.writeString(speed);
 			MotorControler.writeString("G");
 			
-			System.out.println("Recieved: "+ dataIN[1]);
-			
-			
+			System.out.println("Recieved: "+ speed);
 		}
 		/*
 		//client
