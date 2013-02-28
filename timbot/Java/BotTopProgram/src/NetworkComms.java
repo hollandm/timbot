@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketAddress;
@@ -29,18 +28,37 @@ public class NetworkComms implements Runnable {
 
 	public static void main(String args[]) throws IOException, InterruptedException {
 
+		AnimaticsControler MotorControler = new AnimaticsControler();
+		try {
+			MotorControler.connect("COM4");
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		/*
+		System.out.println("Started");
 		byte[] dataIN = new byte[7];
 		
 		MulticastSocket in = new MulticastSocket(6000);
 		DatagramPacket recv = new DatagramPacket(dataIN, 7);
+//		SocketAddress addr = SocketAddress;
+		InetAddress add = InetAddress.getByName("224.0.0.1");
+		in.joinGroup(add);
 		
-		in.receive(recv);
 		
-		System.out.println("Recieved: "+ dataIN[1]);
-		*/
-		
+		while (true) {
+			in.receive(recv);
+			
+			String speed = "VT="+dataIN[1];
+			MotorControler.writeString(speed);
+			MotorControler.writeString("G");
+			
+			System.out.println("Recieved: "+ dataIN[1]);
+			
+			
+		}
+		/*
 		//client
 		byte[] data = new byte[7];
 		data[0]=0;
@@ -65,7 +83,7 @@ public class NetworkComms implements Runnable {
 			out.send(send);
 			Thread.sleep(10);
 		}
-		
+		*/
 		
 		
 	}
