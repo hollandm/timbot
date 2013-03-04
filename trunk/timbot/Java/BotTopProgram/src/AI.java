@@ -13,8 +13,6 @@ public class AI implements Runnable {
 	private int aiState = 0;
 
 
-
-
 	int startPosition = -1; // Start Position. ID's corner by definition (1-4).
 	int startAngle = -1; // starting rotation / angle.
 	
@@ -112,7 +110,7 @@ public class AI implements Runnable {
 	 * @param data (sensor data from Arduino)
 	 * @param out (how to talk to the arduino to actually do stuff)
 	 */
-	public AI(AInputData data, AOutput out){
+	public AI(BotTop robot, Data data) {
 		//TODO
 	}
 	
@@ -121,4 +119,7 @@ public class AI implements Runnable {
 	 * @return AI's current state
 	 */
 	public int getAiState() {return aiState;}
+	
+
+	
 }

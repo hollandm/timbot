@@ -2,7 +2,7 @@
 
 /**
  * 
- * AInputData
+ * ArduinoInput
  * 
  * Data structure / thread for capturing and storing data from 
  * the arduino.
@@ -10,37 +10,80 @@
  * @author Matt Delaney, Matt Holland
  *
  */
-public class AInputData implements Runnable {
-	
+public class Data  {
+
 	// IR values are in CENTIMETERS.
 	// Accurate from 30cm to 150cm.
 	private float irFront = 0;
 	private float irBack = 0;
 	private float irLeft = 0;
 	private float irRight = 0;
-	
+
 	private float potBucket = 0;
 	private float potArm = 0;
-	
+
 	private float gyroYaw = 0;
 	private float gyroPitch = 0;
-	
+
 	//TODO: Gyro values might be more useful in another unit?
-	
+
 	private boolean eStop = false;
-	
-	
-	/* Raw Sensor Input Values */
-	private float m_irFrontRaw = 0;
-	private float m_irBackRaw = 0;
-	private float m_irLeftRaw = 0;
-	private float m_irRightRaw = 0;
-	
-	private float m_potBucketRaw = 0;
-	private float m_potArmRaw = 0;
-	
-	private float m_gyroYawRaw = 0;
-	private float m_gyroPitchRaw = 0;
+
+
+	public void setIrFront(float irFront) {
+		synchronized (this) {
+			this.irFront = irFront;
+		}
+	}
+
+	public void setIrBack(float irBack) {
+		synchronized (this) {
+			this.irBack = irBack;
+		}
+	}
+
+	public void setIrLeft(float irLeft) {
+		synchronized (this) {
+			this.irLeft = irLeft;
+		}
+	}
+
+	public void setIrRight(float irRight) {
+		synchronized (this) {
+			this.irRight = irRight;
+		}
+	}
+
+	public void setPotBucket(float potBucket) {
+		synchronized (this) {
+			this.potBucket = potBucket;
+		}
+	}
+
+	public void setPotArm(float potArm) {
+		synchronized (this) {
+			this.potArm = potArm;
+		}
+	}
+
+	public void setGyroYaw(float gyroYaw) {
+		synchronized (this) {
+			this.gyroYaw = gyroYaw;
+		}
+	}
+
+	public void setGyroPitch(float gyroPitch) {
+		synchronized (this) {
+			this.gyroPitch = gyroPitch;
+		}
+	}
+
+	public void seteStop(boolean eStop) {
+		synchronized (this) {
+			this.eStop = eStop;
+		}
+	}
+
 	/**
 	 * gets the value of front ir sensor
 	 * @return
@@ -50,7 +93,7 @@ public class AInputData implements Runnable {
 			return irFront;	
 		}
 	}
-	
+
 	/**
 	 * gets the value of back ir sensor
 	 * @return
@@ -60,7 +103,7 @@ public class AInputData implements Runnable {
 			return irBack;
 		}
 	}
-	
+
 	/**
 	 * gets the value of left ir sensor
 	 * @return
@@ -70,7 +113,7 @@ public class AInputData implements Runnable {
 			return irLeft;
 		}
 	}
-	
+
 	/**
 	 * gets the value of right ir sensor
 	 * @return
@@ -80,7 +123,7 @@ public class AInputData implements Runnable {
 			return irRight;
 		}
 	}
-	
+
 	/**
 	 * gets the value of potentiometer bucket
 	 * @return
@@ -90,7 +133,7 @@ public class AInputData implements Runnable {
 			return potBucket;
 		}
 	}
-	
+
 	/**
 	 * gets the value of potentiometer arm
 	 * @return
@@ -100,7 +143,7 @@ public class AInputData implements Runnable {
 			return potArm;
 		}
 	}
-	
+
 	/**
 	 * gets the value of gyroYaw
 	 * @return
@@ -110,7 +153,7 @@ public class AInputData implements Runnable {
 			return gyroYaw;
 		}
 	}
-	
+
 	/**
 	 * gets the value of gyroPitch
 	 * @return
@@ -120,45 +163,5 @@ public class AInputData implements Runnable {
 			return gyroPitch;
 		}
 	}
-	
-	/**
-	 * reads data from the arduino
-	 */
-	public void getData() {
-		// TODO: GET DATA. Store to m_*Raw variables.
-		
-		
-		convertData();
-	}
 
-
-	/**
-	 * converts raw data into usable information.
-	 */
-private void convertData() {
-		synchronized(this){
-			// convert IR sensor data to Centimeters:
-			irLeft = (400 / m_irLeftRaw *33);
-			irRight = (400 / m_irRightRaw *33);
-			irFront = (400 / m_irFrontRaw *33);
-			irBack = (400 / m_irBackRaw *33);
-			
-			// TODO convert Gyro values to usable data
-		
-			// TODO convert bucketRaw and potArmRaw to usable data (cm)
-
-			
-		}//synchronized
-		
-	}
-
-	@Override
-	public void run() {
-		synchronized (this) {
-			getData();
-		}
-		Thread.yield();
-		
-	}
-	
 }

@@ -7,11 +7,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
-public class AnimaticsControler {
+public class AnimaticsController {
 
 	OutputStream out = null;
 	
-	public AnimaticsControler() {}
+	public AnimaticsController() {}
 
 	/**
 	 * Given a port, connects over serial
@@ -93,7 +93,7 @@ public class AnimaticsControler {
 	
 	public static void main ( String[] args )
 	{
-		AnimaticsControler test = new AnimaticsControler();
+		AnimaticsController test = new AnimaticsController();
 		try {
 			test.connect("COM4");
 			

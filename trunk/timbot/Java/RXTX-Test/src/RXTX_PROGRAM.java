@@ -49,7 +49,7 @@ public class RXTX_PROGRAM {
 		{
 			this.in = in;
 		}
-
+		
 		public void run ()
 		{
 			byte[] buffer = new byte[1024];
@@ -67,7 +67,7 @@ public class RXTX_PROGRAM {
 			}            
 		}
 	}
-
+	
 	/** */
 	public static class SerialWriter1 implements Runnable 
 	{

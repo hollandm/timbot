@@ -2,17 +2,15 @@ import java.io.IOException;
 
 
 /**
- * AOutput
+ * ArduinoOutput
  * 
  * The .java file that sends all output signals to the arduino.
  * @author 
  *
  */
 
-public class AOutput {
+public class ArduinoWriter {
 
-	
-	AnimaticsControler MotorControler;
 	
 	/**
 	 * Extend the bucket by the given distance

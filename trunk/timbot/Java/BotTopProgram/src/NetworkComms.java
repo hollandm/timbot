@@ -17,7 +17,9 @@ public class NetworkComms implements Runnable {
 	int mode = 0;
 
 
-
+	public NetworkComms(BotTop robot) {
+		
+	}
 
 	@Override
 	public void run() {
@@ -28,7 +30,7 @@ public class NetworkComms implements Runnable {
 
 	public static void main(String args[]) throws IOException, InterruptedException {
 		
-		AnimaticsControler MotorControler = new AnimaticsControler();
+		AnimaticsController MotorControler = new AnimaticsController();
 		try {
 			MotorControler.connect("COM4");
 			MotorControler.writeString("ZS"); 
