@@ -80,19 +80,18 @@ public class RXTX_PROGRAM {
 
 		public void run ()
 		{
-			System.out.println("RUN");
+			System.out.println("GO");
 			int acc = 100;
 			int vel = 100000;
 			int pos = 100*vel;
-			//writeString("O=0");
 			writeString("ZS"); 
 			writeString("MV");
 			writeString("EIGN(2)");
 			writeString("EIGN(3)");
 			writeString("ADT="+acc);
 			writeString("VT="+vel);
-		//	writeString("PRT="+pos);
-			writeString("G");
+			
+			writeString((char)(129)+"S");
 			try {
 				out.close();
 			} catch (IOException e) {
@@ -133,7 +132,7 @@ public class RXTX_PROGRAM {
 	{
 		try
 		{
-			(new RXTX_PROGRAM()).connect("COM9");
+			(new RXTX_PROGRAM()).connect("COM4");
 
 		}
 		catch ( Exception e )
