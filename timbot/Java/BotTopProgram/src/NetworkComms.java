@@ -53,16 +53,31 @@ public class NetworkComms implements Runnable {
 		InetAddress add = InetAddress.getByName("224.0.0.1");
 		in.joinGroup(add);
 		
+		in.setReceiveBufferSize(7);
+		
 		System.out.println("Listening to traffic");
+		
 		
 		while (true) {
 			in.receive(recv);
+
+			String speedLeft  = "VT="+(dataIN[0]-50)*2500;
+			String speedRight = "VT="+(dataIN[2]-50)*2500;
 			
-			String speed = "VT="+(dataIN[0]-50)*2000;
-			MotorControler.writeString(speed);
+			MotorControler.writeString((char)129+"");
+			
+			MotorControler.writeString(speedLeft);
 			MotorControler.writeString("G");
 			
-			System.out.println("Recieved: "+ speed);
+			MotorControler.writeString((char)130+"");
+			
+			MotorControler.writeString(speedRight);
+			MotorControler.writeString("G");
+
+			
+			System.out.println("Recieved: "+ speedLeft + " - " + speedRight);
+			
+			
 		}
 		/*
 		//client

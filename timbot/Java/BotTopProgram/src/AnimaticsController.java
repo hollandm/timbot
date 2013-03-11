@@ -70,6 +70,7 @@ public class AnimaticsController {
 		in = in.toUpperCase();
 		try
 		{
+			
 			int i;
 			for (i = 0; i < in.length(); i++)
 			{
@@ -87,7 +88,6 @@ public class AnimaticsController {
 //		System.out.println(in);
 
 	}
-	
 	
 	
 	
