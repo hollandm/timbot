@@ -1,56 +1,88 @@
 package snippet;
 
+import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
+
 import java.nio.ByteBuffer;
 
+import com.googlecode.javacpp.Pointer;
 import com.googlecode.javacv.FrameGrabber;
+import com.googlecode.javacv.OpenCVFrameGrabber;
 import com.googlecode.javacv.FrameGrabber.Exception;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
+import static com.googlecode.javacpp.Loader.sizeof;
+import static com.googlecode.javacv.cpp.opencv_core.CV_FILLED;
+import static com.googlecode.javacv.cpp.opencv_core.CV_RGB;
+import static com.googlecode.javacv.cpp.opencv_core.IPL_DEPTH_8U;
+import static com.googlecode.javacv.cpp.opencv_core.cvCreateImage;
+import static com.googlecode.javacv.cpp.opencv_core.cvCreateMemStorage;
+import static com.googlecode.javacv.cpp.opencv_core.cvDrawContours;
+import static com.googlecode.javacv.cpp.opencv_core.cvGetSize;
+import static com.googlecode.javacv.cpp.opencv_core.cvPoint;
+import static com.googlecode.javacv.cpp.opencv_highgui.cvLoadImage;
+import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
+import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2GRAY;
+import static com.googlecode.javacv.cpp.opencv_imgproc.CV_CHAIN_APPROX_SIMPLE;
+import static com.googlecode.javacv.cpp.opencv_imgproc.CV_RETR_CCOMP;
+import static com.googlecode.javacv.cpp.opencv_imgproc.CV_THRESH_BINARY;
+import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
+import static com.googlecode.javacv.cpp.opencv_imgproc.cvFindContours;
+import static com.googlecode.javacv.cpp.opencv_imgproc.cvThreshold;
+
+import java.awt.Color;
+import java.awt.Image;
+import java.util.Random;
+
+import com.googlecode.javacv.cpp.opencv_core.CvContour;
+import com.googlecode.javacv.cpp.opencv_core.CvMemStorage;
+import com.googlecode.javacv.cpp.opencv_core.CvScalar;
+import com.googlecode.javacv.cpp.opencv_core.CvSeq;
+import com.googlecode.javacv.cpp.opencv_core.IplImage;
+import com.googlecode.javacv.cpp.opencv_imgproc.CvHistogram;
+
+import static com.googlecode.javacv.cpp.opencv_core.cvCreateImage;
+import static com.googlecode.javacv.cpp.opencv_core.cvGet2D;
+import static com.googlecode.javacv.cpp.opencv_core.cvGetSize;
+import static com.googlecode.javacv.cpp.opencv_highgui.CV_EVENT_MOUSEMOVE;
+import static com.googlecode.javacv.cpp.opencv_highgui.CV_WINDOW_AUTOSIZE;
+import static com.googlecode.javacv.cpp.opencv_highgui.cvLoadImage;
+import static com.googlecode.javacv.cpp.opencv_highgui.cvNamedWindow;
+import static com.googlecode.javacv.cpp.opencv_highgui.cvSetMouseCallback;
+import static com.googlecode.javacv.cpp.opencv_highgui.cvShowImage;
+import static com.googlecode.javacv.cpp.opencv_highgui.cvWaitKey;
+import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2HSV;
+import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
+
+import com.googlecode.javacv.cpp.opencv_core.CvScalar;
+import com.googlecode.javacv.cpp.opencv_core.IplImage;
+import com.googlecode.javacv.cpp.opencv_highgui.CvMouseCallback;
+
+
+
 public class Snippet {
 	public static void main(String[] args) {
-		FrameGrabber grabber;
-		try {
-			System.out.println("Test1");
-			grabber = FrameGrabber.createDefault(0);
+		OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
+		IplImage src = null;
 
-			System.out.println("Test2");
+		try { 
 			grabber.start();
+			src = grabber.grab();
+			//			if (src != null) {
+			//				
+			//				cvSaveImage("capture.jpg", src);
+			//			} 
+		} catch (Exception e) { 
+			e.printStackTrace();
+		} 
 
-			System.out.println("Test3");
-			grabber.grab();
-			IplImage grabbedImage = grabber.grab();
-			
+		IplImage hsv = cvCreateImage(cvGetSize(src), 8, 3);
+		cvCvtColor(src, hsv, CV_BGR2HSV);
 
-			System.out.println("Test4");
-			int width  = grabbedImage.width();
-			int height = grabbedImage.height();
+		IplImage h_plane = cvCreateImage(cvGetSize(src), 8, 1);
+		IplImage s_plane = cvCreateImage(cvGetSize(src), 8, 1);
+		IplImage v_plane = cvCreateImage(cvGetSize(src), 8, 1);
 
-//			grabbedImage.
-			
-			System.out.println(width + " " + height);
-
-
-			System.out.println("Test5");
-//			grabber.stop();
-			
-//			grabber.release();
-			grabber.stop();
-			
-			
-			//K i have an image now so do something with it
-//			grabbedImage.asByteBuffer();
-			
-			
-//			Bitmap bitmapImage;
-			
-//			ByteBuffer buffer = ByteBuffer.allocate(bitmapImage.getWidth()*bitmapImage.getHeight()*4);
-//	        bitmapImage.copyPixelsToBuffer(buffer);
-//	        IplImage iplImage = IplImage.create(bitmapImage.getWidth(), bitmapImage.getHeight(), 8, 3); // depth 8-bit and 3 channels
-//	        iplImage.imageData(buffer);
-			
-		} catch (Exception e) {
-//			e.printStackTrace();
-		}
+		
 	}
-}
 
+}
