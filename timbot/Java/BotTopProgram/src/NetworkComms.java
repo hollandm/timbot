@@ -24,7 +24,7 @@ public class NetworkComms implements Runnable {
 	@Override
 	public void run() {
 
-
+		
 
 	}
 
@@ -33,11 +33,11 @@ public class NetworkComms implements Runnable {
 		AnimaticsController MotorControler = new AnimaticsController();
 		try {
 			MotorControler.connect("COM4");
-			MotorControler.writeString("ZS"); 
-			MotorControler.writeString("MV");
-			MotorControler.writeString("EIGN(2)");
-			MotorControler.writeString("EIGN(3)");
-			MotorControler.writeString("ADT="+10000);
+//			MotorControler.writeString("ZS"); 
+//			MotorControler.writeString("MV");
+//			MotorControler.writeString("EIGN(2)");
+//			MotorControler.writeString("EIGN(3)");
+//			MotorControler.writeString("ADT="+10000);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
