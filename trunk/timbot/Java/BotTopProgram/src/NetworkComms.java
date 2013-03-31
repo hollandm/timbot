@@ -31,18 +31,16 @@ public class NetworkComms implements Runnable {
 	public static void main(String args[]) throws IOException, InterruptedException {
 		
 		AnimaticsController MotorControler = new AnimaticsController();
+		ArduinoWriter arduino = new ArduinoWriter();
 		try {
 			MotorControler.connect("COM4");
-//			MotorControler.writeString("ZS"); 
-//			MotorControler.writeString("MV");
-//			MotorControler.writeString("EIGN(2)");
-//			MotorControler.writeString("EIGN(3)");
-//			MotorControler.writeString("ADT="+10000);
+			arduino.connect("COM9");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		
 		byte[] dataIN = new byte[7];
@@ -74,11 +72,33 @@ public class NetworkComms implements Runnable {
 			MotorControler.writeString(speedRight);
 			MotorControler.writeString("G");
 
-			
+			arduino.write('a');
+			arduino.write(dataIN[0]);
+
+			arduino.write('b');
+			arduino.write(dataIN[1]);
+
+			arduino.write('c');
+			arduino.write(dataIN[2]);
+
+			arduino.write('d');
+			arduino.write(dataIN[3]);
+
+			arduino.write('e');
+			arduino.write((byte) ((-1)*dataIN[4]));
+
+			arduino.write('f');
+			arduino.write((byte) ((-1)*dataIN[5]));
+
+			arduino.write('m');
+			arduino.write(dataIN[6]);    //Operating Mode
+
+
 			System.out.println("Recieved: "+ speedLeft + " - " + speedRight);
-			
+			Thread.sleep(100);			
 			
 		}
+		
 		/*
 		//client
 		byte[] data = new byte[7];
@@ -104,8 +124,8 @@ public class NetworkComms implements Runnable {
 			out.send(send);
 			Thread.sleep(10);
 		}
-		*/
 		
+		*/
 		
 	}
 
