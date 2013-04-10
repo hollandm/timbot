@@ -9,8 +9,8 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 public class ColorDetect {
     //color range of red like color
-	static CvScalar min = cvScalar(0, 0, 130, 0);//BGR-A
-    static CvScalar max= cvScalar(180, 110, 255, 0);//BGR-A
+	static CvScalar min = cvScalar(100, 100, 200, 0);//BGR-A
+    static CvScalar max= cvScalar(200, 200, 255, 0);//BGR-A
 
     public static void main(String[] args) {
         //read image
