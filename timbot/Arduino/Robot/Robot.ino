@@ -2,8 +2,11 @@
 
 //--------------- Constants ---------------\\
 
+
+const byte BUFFER_SYNC = 101;
+
 //Motor controller pin defs
-const int ARM = 5;             //Digital
+const int ARM = 4;             //Digital
 const int BUCKET = 6;          //Digital
 
 //Pin to check if E-Button has been pressed
@@ -39,7 +42,11 @@ int RightIR = 0;
 int ArmPotentiometer = 0;
 int BucketPotentiometer = 0;
 
+const float DRIVEMAX = 0.49;  // Up to 0.5 as max
+
+
 //------Code N Stuff------\\
+
 
 void setup() {
  //Set up pin modes
@@ -53,7 +60,7 @@ void setup() {
 
 void loop() {
   
-  updateSensorValues();
+//  updateSensorValues();
   recieveInstructions();
 }
 
@@ -64,18 +71,24 @@ void loop() {
 void recieveInstructions() {
   
   //Read from serial
-  if (!Serial.available() == 0) {return;}
+  if (Serial.available() <= 1) {return;}
   hasStarted = true;  //operations have begun
+
+  if (Serial.read() != BUFFER_SYNC) {return;}  
   
-  byte recieve[4];
-  recieve[0] = byte(Serial.read()); //Drive Left
-  recieve[1] = byte(Serial.read()); //Drive Right
-  recieve[2] = byte(Serial.read()); //Actuate Arm
-  recieve[3] = byte(Serial.read()); //Actuate Bucket
+  byte recieve[2];
+  recieve[0] = byte(Serial.read()); //Actuate Arm
+  recieve[1] = byte(Serial.read()); //Actuate Bucket
+  
+  float a = (recieve[0]-50)/50.0;
+  float b = (recieve[1]-50)/50;
+//  Serial.println(recieve[0]);
+//  Serial.println(a);
+  actuateArm(a);
   
   //actuate and drive if needed
   
-  
+
 }
 
 /*
@@ -135,6 +148,9 @@ void readRightIR() {}
  * the BotTop to shutdown
  */
 void readEStop() {
+  hasStarted = true;
+  Shutdown = 0;
+  /*
   int button = digitalRead(E_BUTTON);
   
    if (button == HIGH) {
@@ -147,6 +163,7 @@ void readEStop() {
          Shutdown = 1;
       }
    }
+   */
 }
 
 /* 
@@ -156,17 +173,62 @@ void readEStop() {
  * Arm given priority over bucket, regarding avoidance of
  * hitting the bot body
  */
-void actuateArm(int desiredDistance) {}
-void actuateBucket(int desiredDistance) {}
+//void actuateArm(int desiredDistance) {}
+//void actuateBucket(int desiredDistance) {}
 
 
-/* 
- * Make the left set of wheels spin at the desired speed
+/*
+ * actuateArm
+ * Raises or lowers the arms
  */
-void driveLeft(int speed) {
-  //Waiting for components
+void actuateArm(float spd)
+{
+  float aspeed = spd;
+  if ( spd > 1)
+  {
+    aspeed = 1;
+  }
+  else if ( spd < -1)
+  {
+    aspeed = -1;
+  }
+  int us = (int)((( aspeed * DRIVEMAX ) + 1.5) * 1000 );
+  drivePulse(ARM, us);
 }
-void driveRight(int speed) {
-  //Waiting for components  
+
+/*
+ * actuateBucket
+ * Raises or lowers the bucket
+ */
+void actuateBucket(float spd)
+{
+  float aspeed = spd;
+  //*
+  if ( spd > 1)
+  {
+    aspeed=1;
+  }
+  else if ( spd < -1)
+  {
+    aspeed=-1;
+  }
+  //*/
+  int us = (int)((( aspeed * DRIVEMAX ) + 1.5) * 1000 );
+  drivePulse(BUCKET, us); 
+  
+}
+
+/*
+ * drivePulse
+ * Used to create a pulse of specified width
+ * Params: pin = Digital Output pin to write the pulse to
+ *         us  = Width of pulse in microseconds
+ */
+void drivePulse(int pin, int us) 
+{
+	digitalWrite(pin, HIGH);
+	delayMicroseconds(us);
+        digitalWrite(pin, LOW);
+        //delay(12);
 }
 
