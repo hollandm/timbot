@@ -11,13 +11,13 @@
 public class AI implements Runnable {
 
 	private int aiState = 0;
-
+	private boolean isManualControl = false;
 
 	int startPosition = -1; // Start Position. ID's corner by definition (1-4).
 	int startAngle = -1; // starting rotation / angle.
 	
 	
-	public static final int STATE_MANUAL_CONTROL = -1;
+	//public static final int STATE_MANUAL_CONTROL = -1;
 	public static final int STATE_WAITING_FOR_START_COMMAND = 0;
 	public static final int STATE_FIND_STARTING_ORIENTATION = 1;
 	public static final int STATE_GO_TO_DIG_ZONE = 2;
@@ -28,11 +28,13 @@ public class AI implements Runnable {
 
 	@Override
 	public void run() {
+		// print timestamp
+		
+		// if we're not in manual-mode or waiting-mode, run the loop.
+	if((isManualControl || aiState == STATE_WAITING_FOR_START_COMMAND) ){
+		Thread.yield();
+	}else{
 		switch (aiState){
-		case -1: // Manual Control: Do nothing! Should be shut off by BotTop instead.
-		case 0: // waiting for start command. Still do nothing!
-			Thread.yield();
-			break;
 		case 1:
 			figureOutWhereWeAreStarting();
 			break;
@@ -51,7 +53,7 @@ public class AI implements Runnable {
 		case 99:
 			break;
 		}
-		
+	}
 		
 	}
 	
@@ -59,8 +61,12 @@ public class AI implements Runnable {
 	 * figure out where you are.
 	 */
 	private void figureOutWhereWeAreStarting() {
-		// TODO Auto-generated method stub
+		// TODO: Capture images and use sensor data to figure out where we are.
 		
+		// Set whatever variables state 2 needs to drive.
+		
+		// Proceed to next state.
+		this.aiState = STATE_GO_TO_DIG_ZONE;
 	}
 
 	/**
@@ -69,6 +75,15 @@ public class AI implements Runnable {
 	private void goToDigAreaForTheFirstTime() {
 		// TODO Auto-generated method stub
 		
+		// Using sensor data from part 1 (and ongoing sensor data, if desired), drive to the dig area.
+		
+		// Keep the beacons on top of each other.
+		// don't forget to drive 'backwards'!
+		
+		// lower bucket as we go[?]
+		
+		// Once we have arrived, proceed to next state.
+		this.aiState = STATE_DIG;
 	}
 	
 	/**
@@ -77,6 +92,11 @@ public class AI implements Runnable {
 	private void collectDust() {
 		// TODO Auto-generated method stub
 		
+		// Dig. Figure this out once we have a working robot.
+		
+		
+		// Once we've collected dust and raised the bucket, proceed to the next state.
+		this.aiState = STATE_TRAVEL_TO_DUMP_ZONE;
 	}
 	
 	/**
@@ -85,13 +105,29 @@ public class AI implements Runnable {
 	private void goAndDumpDust() {
 		// TODO Auto-generated method stub
 		
+		// determine where we need to drive to
+		
+		// drive there
+		
+		// dump dust.
+		
+		// raise the bucket
+		
+		// Proceed to next state.
+		this.aiState = STATE_TRAVEL_BACK_TO_DIG_ZONE;
+		
 	}
 	/**
 	 * Return to the dig zone!
 	 */
 	private void returnToDigZone() {
 		// TODO Auto-generated method stub
+		// drive backwards to the dig zone
 		
+		// use IR sensor to determine when we're in the right range
+		
+		// loop back to dig state
+		this.aiState = STATE_DIG;
 	}
 	
 	
@@ -107,6 +143,8 @@ public class AI implements Runnable {
 	/**
 	 * Constructor. Requires an input-data pointer.
 	 * TODO: Does this need an output reference?
+	 * 'out' is BOTTOP
+	 * 
 	 * @param data (sensor data from Arduino)
 	 * @param out (how to talk to the arduino to actually do stuff)
 	 */
@@ -119,6 +157,30 @@ public class AI implements Runnable {
 	 * @return AI's current state
 	 */
 	public int getAiState() {return aiState;}
+
+	/**
+	 * startRun()
+	 * 
+	 * called by BotTop to start the robot on its run once we get the go-ahead.
+	 */
+	public void startRun(){
+		if(this.aiState == STATE_WAITING_FOR_START_COMMAND){
+			this.aiState = STATE_FIND_STARTING_ORIENTATION;
+		}
+	}
+	
+	/**
+	 * setManualControl()
+	 * 
+	 * sets the manual-control switch.
+	 * 
+	 * @param isManualControl set manual control to true or false
+	 */
+	
+	public void setManualControl(boolean manControl){
+		//TODO: for competition, make one-way (only set if true).
+		this.isManualControl = manControl;
+	}
 	
 
 	
