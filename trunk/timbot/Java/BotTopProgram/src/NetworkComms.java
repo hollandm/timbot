@@ -8,8 +8,6 @@ import java.net.UnknownHostException;
 
 public class NetworkComms implements Runnable {
 
-	float leftSpeed = 0;
-	float rightSpeed = 0;
 
 	float armSpeed = 0;
 	float bucketSpeed = 0;
@@ -31,10 +29,10 @@ public class NetworkComms implements Runnable {
 	public static void main(String args[]) throws IOException, InterruptedException {
 		
 		AnimaticsController MotorControler = new AnimaticsController();
-		ArduinoWriter arduino = new ArduinoWriter();
+		Arduino arduino = new Arduino();
 		try {
-			MotorControler.connect("COM4");
-			arduino.connect("COM9");
+			MotorControler.connect("COM5");
+			arduino.connect();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -59,8 +57,10 @@ public class NetworkComms implements Runnable {
 		while (true) {
 			in.receive(recv);
 
-			String speedLeft  = "VT="+(dataIN[0]-50)*2500;
-			String speedRight = "VT="+(dataIN[2]-50)*2500;
+			int speed = 10000;
+			
+			String speedLeft  = "VT="+(dataIN[0]-50)*speed;
+			String speedRight = "VT="+(dataIN[2]-50)*speed;
 			
 			MotorControler.writeString((char)129+"");
 			
@@ -72,28 +72,17 @@ public class NetworkComms implements Runnable {
 			MotorControler.writeString(speedRight);
 			MotorControler.writeString("G");
 
-			arduino.write('a');
-			arduino.write(dataIN[0]);
-
-			arduino.write('b');
-			arduino.write(dataIN[1]);
-
-			arduino.write('c');
-			arduino.write(dataIN[2]);
-
-			arduino.write('d');
-			arduino.write(dataIN[3]);
-
-			arduino.write('e');
-			arduino.write((byte) ((-1)*dataIN[4]));
-
-			arduino.write('f');
-			arduino.write((byte) ((-1)*dataIN[5]));
-
-			arduino.write('m');
-			arduino.write(dataIN[6]);    //Operating Mode
-
-
+			if (dataIN[4] > (byte)0 && dataIN[5] > (byte)0) {
+				arduino.write(arduino.BUFFER_SYNC);		//SYNC stuff
+				arduino.write(dataIN[2]);					//Actuate Arm
+				arduino.write(dataIN[3]);					//Actuate Bucket	
+			}
+			
+			
+			byte[] b = new byte[10];
+			System.out.println(arduino.in.readLine());
+			
+			
 			System.out.println("Recieved: "+ speedLeft + " - " + speedRight);
 			Thread.sleep(100);			
 			
