@@ -73,7 +73,7 @@ public class NetworkComms implements Runnable {
 			MotorControler.writeString("G");
 
 			if (dataIN[4] > (byte)0 && dataIN[5] > (byte)0) {
-				arduino.write(arduino.BUFFER_SYNC);		//SYNC stuff
+				arduino.write(arduino.BUFFER_SYNC);			//SYNC stuff
 				arduino.write(dataIN[2]);					//Actuate Arm
 				arduino.write(dataIN[3]);					//Actuate Bucket	
 			}
