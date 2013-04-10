@@ -8,7 +8,7 @@
 public class BotTop {
 
 	ArduinoReader arduinoReader;
-	ArduinoWriter arduinoController;
+	Arduino arduinoController;
 	AnimaticsController motorController;
 	
 	AI ai;
@@ -30,7 +30,7 @@ public class BotTop {
 		arduinoReader = new ArduinoReader();
 		
 		motorController = new AnimaticsController();
-		arduinoController = new ArduinoWriter();
+		arduinoController = new Arduino();
 		
 		net = new NetworkComms(this);
 		ai = new AI(this,data);	
