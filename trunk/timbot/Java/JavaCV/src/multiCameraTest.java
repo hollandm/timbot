@@ -1,3 +1,5 @@
+package snippet;
+
 import static com.googlecode.javacv.cpp.opencv_core.cvInRangeS;
 import static com.googlecode.javacv.cpp.opencv_core.cvScalar;
 import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
@@ -41,40 +43,43 @@ public class multiCameraTest {
 		cam3.start();
 		System.out.println("Camera 3 loaded.");
 		
-		//VideoInputFrameGrabber cam4 = new VideoInputFrameGrabber(4);	
-		//cam4.start();
-		//System.out.println("Camera 4 loaded.");
+		VideoInputFrameGrabber cam4 = new VideoInputFrameGrabber(4);	
+		cam4.start();
+		System.out.println("Camera 4 loaded.");
 		
 		
 			long t0 = System.currentTimeMillis();
 			img[1] = cam1.grab();
 			img[2] = cam2.grab();
 			img[3] = cam3.grab();
+			img[4] = cam4.grab();
 			
-//			for (int i = 1; i < 4; ++i) {
-//				cvInRangeS(img[1], min, max, thr[1]);?
-//			}
+			//for (int i = 1; i < 5; i++) {
+			//	cvInRangeS(img[1], min, max, thr[1]);
+			//}
 			
 			System.out.println(System.currentTimeMillis() - t0);
 
-
-			cvSaveImage("E:\\Robotics\\Webcam Pictures\\"+1+".jpg", img[1]);
-			cvSaveImage("E:\\Robotics\\Webcam Pictures\\"+2+".jpg", img[2]);
-			cvSaveImage("E:\\Robotics\\Webcam Pictures\\"+3+".jpg", img[3]);
+			// my path
+			cvSaveImage("C:\\robots\\Webcam Pictures\\"+1+".jpg", img[1]);
+			cvSaveImage("C:\\robots\\Webcam Pictures\\"+2+".jpg", img[2]);
+			cvSaveImage("C:\\robots\\Webcam Pictures\\"+3+".jpg", img[3]);
+			cvSaveImage("C:\\robots\\Webcam Pictures\\"+4+".jpg", img[4]);
 			
-//			cvSaveImage("E:\\Robotics\\Webcam Pictures\\"+1+"t.jpg", thr[1]);
-//			cvSaveImage("E:\\Robotics\\Webcam Pictures\\"+2+"t.jpg", thr[2]);
-//			cvSaveImage("E:\\Robotics\\Webcam Pictures\\"+3+"t.jpg", thr[3]);
+			//cvSaveImage("C:\\robots\\Webcam Pictures\\"+1+"t.jpg", thr[1]);
+			//cvSaveImage("C:\\robots\\Webcam Pictures\\"+2+"t.jpg", thr[2]);
+			//cvSaveImage("C:\\robots\\Webcam Pictures\\"+3+"t.jpg", thr[3]);
 			
 			cam1.stop();
 			cam2.stop();
-			cam3.stop();			
+			cam3.stop();
+			cam4.stop();
 
 			cam1.release();
 			cam2.release();
 			cam3.release();
-			
-			//cam4.stop();
+			cam4.release();
+
 //		}
 		
 //		long t0 = System.currentTimeMillis();
