@@ -30,6 +30,7 @@ public class multiCameraTest {
 	static CvScalar min = cvScalar(0, 0, 100, 0);//BGR-A
     static CvScalar max= cvScalar(50, 50, 200, 0);//BGR-A
     public static final int GRID_SIZE = 10; // size of the grid for searching for a color
+    public static final int FOV = 90;
 	
 	public static void main(String[] args) throws Exception {
 
@@ -91,7 +92,12 @@ public class multiCameraTest {
 				//get real average value
 				avgPix = numPix ==0 ? avgPix : avgPix / numPix;
 				avgX[i] = avgPix;
+				
+				double angle = ((double) avgPix / (double) img[i].width())*FOV;
+				
 				System.out.println("Avg Position is " + avgPix );
+				System.out.println("Esitmated Angle is " + angle );
+				
 			}
 			
 			System.out.println(System.currentTimeMillis() - t0);
@@ -117,7 +123,7 @@ public class multiCameraTest {
 			cvRectangle(img[1],topPoint,botPoint,linePix,10,8,0);
 			//cvRectangle(thr[1],topPoint,botPoint,linePix,10,8,0);
 			cvSaveImage("C:\\robots\\Webcam Pictures\\"+1+".jpg", img[1]);
-			//cvSaveImage("C:\\robots\\Webcam Pictures\\"+1+"t.jpg", thr[1]);
+			cvSaveImage("C:\\robots\\Webcam Pictures\\"+1+"t.jpg", thr[1]);
 			//end: drawing lines
 			
 			
