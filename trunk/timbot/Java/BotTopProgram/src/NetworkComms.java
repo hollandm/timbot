@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 
 public class NetworkComms implements Runnable {
@@ -31,8 +32,8 @@ public class NetworkComms implements Runnable {
 		AnimaticsController MotorControler = new AnimaticsController();
 		Arduino arduino = new Arduino();
 		try {
-			MotorControler.connect("COM5");
-			arduino.connect();
+			MotorControler.connect("COM11");
+			arduino.connect("COM3");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -53,15 +54,37 @@ public class NetworkComms implements Runnable {
 		
 		System.out.println("Listening to traffic");
 		
-		
 		while (true) {
 			in.receive(recv);
 
-			int speed = 10000;
+			int speed = 5000;
 			
-			String speedLeft  = "VT="+(dataIN[0]-50)*speed;
-			String speedRight = "VT="+(dataIN[2]-50)*speed;
+			String speedLeft;
+			String speedRight;
 			
+			if (dataIN[4] != (byte)0  || dataIN[5] != (byte)0) {	//Dig Mode
+				speedLeft  = "VT="+(dataIN[0]-50)*speed*-1;
+				speedRight = "VT="+(dataIN[0]-50)*speed;
+				
+				byte arm = (byte) dataIN[2];
+				byte bucket = (byte)dataIN[3];
+				
+				//avoid cloging the arduino buffer
+				if ((arm != (byte)50) || (bucket != (byte)50)) {
+
+					arduino.write(arduino.BUFFER_SYNC);			//SYNC stuff
+					arduino.write(arm);					//Actuate Arm
+					arduino.write(bucket);					//Actuate Bucket
+//					Thread.sleep(10);
+				}
+				
+			} else {											//Drive Mode
+				speedLeft  = "VT="+(dataIN[2]-50)*speed*-1;
+				speedRight = "VT="+(dataIN[0]-50)*speed;
+			}
+			
+			
+//			
 			MotorControler.writeString((char)129+"");
 			
 			MotorControler.writeString(speedLeft);
@@ -71,20 +94,16 @@ public class NetworkComms implements Runnable {
 			
 			MotorControler.writeString(speedRight);
 			MotorControler.writeString("G");
-
-			if (dataIN[4] > (byte)0 && dataIN[5] > (byte)0) {
-				arduino.write(arduino.BUFFER_SYNC);			//SYNC stuff
-				arduino.write(dataIN[2]);					//Actuate Arm
-				arduino.write(dataIN[3]);					//Actuate Bucket	
-			}
+			System.out.println(dataIN[0] + " " + dataIN[1] + " " + dataIN[2] + " " + dataIN[3] + " " + dataIN[4] + " " + dataIN[5] + " " +  dataIN[6]);
 			
 			
+			//read data back
 			byte[] b = new byte[10];
-			System.out.println(arduino.in.readLine());
+//			System.out.println(arduino.in.readLine());
 			
 			
-			System.out.println("Recieved: "+ speedLeft + " - " + speedRight);
-			Thread.sleep(100);			
+//			System.out.println("Recieved: "+ speedLeft + " - " + speedRight);
+//			Thread.sleep(10);			
 			
 		}
 		

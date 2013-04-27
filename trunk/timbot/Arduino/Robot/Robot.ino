@@ -7,7 +7,7 @@ const byte BUFFER_SYNC = 101;
 
 //Motor controller pin defs
 const int ARM = 4;             //Digital
-const int BUCKET = 6;          //Digital
+const int BUCKET = 3;          //Digital
 
 //Pin to check if E-Button has been pressed
 const int E_BUTTON = 10;       //Digital
@@ -81,14 +81,15 @@ void recieveInstructions() {
   recieve[1] = byte(Serial.read()); //Actuate Bucket
   
   float a = (recieve[0]-50)/50.0;
-  float b = (recieve[1]-50)/50;
+  float b = (recieve[1]-50)/50.0;
 //  Serial.println(recieve[0]);
 //  Serial.println(a);
   actuateArm(a);
+  actuateBucket(b);
   
-  //actuate and drive if needed
-  
-
+//  while (Serial.available() > 0) {
+//     Serial.read(); 
+//  }
 }
 
 /*
