@@ -32,8 +32,8 @@ public class NetworkComms implements Runnable {
 		AnimaticsController MotorControler = new AnimaticsController();
 		Arduino arduino = new Arduino();
 		try {
-			MotorControler.connect("COM11");
-			arduino.connect("COM3");
+			MotorControler.connect("/dev/ttyUSB0");
+			arduino.connect("/dev/ttyS34");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
