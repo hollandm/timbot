@@ -1,5 +1,7 @@
 #summary I just set up OpenCV on my Ubuntu machine, here is how I did it.
 
+Last year I had to install this stuff way to many times. This year I'm going to document things.
+
 *Step 1: Install OpenCV.*
 
 I found a number of download scripts and such that did not work. The one that ended up working for me was at http://opencvstart.blogspot.com/2012/12/install-opencv-in-ubuntu-1204.html.
