@@ -4,9 +4,7 @@ Last year I had to install this stuff way to many times. This year I'm going to 
 
 *Step 1: Install OpenCV.*
 
-I found a number of download scripts and such that did not work. The one that ended up working for me was at http://opencvstart.blogspot.com/2012/12/install-opencv-in-ubuntu-1204.html.
-
-This script installed all the prerequisites for compiling and installing OpenCV and then precoded to download the source, build it, and then install it.
+I found a number of download scripts and such that did not work. The one that ended up working for me was at http://opencvstart.blogspot.com/2012/12/install-opencv-in-ubuntu-1204.html. This script installed all the prerequisites for compiling and installing OpenCV and then precoded to download the source, build it, and then install it.
 
 *Step 2: Set up Compilation script*
 
