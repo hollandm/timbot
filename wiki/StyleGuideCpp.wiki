@@ -1,9 +1,7 @@
 #summary How to format your code while writing in C++ on this project.
 
-= Introduction =
 
-Add your content here.
-
+A very rough draft of our c++ style guide. Will add examples and more detailed explanations later.
 
 == Headers ==
 Any program whose source code is more than one file *must* make use of header files. Under no circumstances are you ever to import a cpp file.
