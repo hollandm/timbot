@@ -10,8 +10,15 @@ I found a number of download scripts and such that did not work. The one that en
 
 Compiling a program that uses OpenCV requires a lot of extra fluff. I modified a script that I found to compile said programs quickly. The original script can be found here, https://help.ubuntu.com/community/OpenCV. My Version of the script is on the repository at http://code.google.com/p/timbot/source/browse/trunk/timbot/experiments/opencv-setup/compile_opencv.sh.
 
+Usage for this script is:
+
+./compile_opencv.sh <file_name>.c
+or
+./compile_opencv.sh <file_name>.cpp
+
+
 *Step 3: Run a test program*
 
-Next it would probably be wise to test the installation and make sure everything is working. Test cases for various languages can be found in our repository at http://code.google.com/p/timbot/source/browse/trunk/timbot/experiments/#experiments%2Fopencv-setup%2Flanguage_tests.
+Next it would probably be wise to test the installation and make sure everything is working. Test cases for various languages can be found in our repository at http://code.google.com/p/timbot/source/browse/trunk/timbot/experiments/#experiments%2Fopencv-setup%2Flanguage_tests. However, users will have to change the path to the image file referenced.
 
 *Step 4: Have fun*
