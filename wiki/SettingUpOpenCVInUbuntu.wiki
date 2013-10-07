@@ -12,9 +12,9 @@ Compiling a program that uses OpenCV requires a lot of extra fluff. I modified a
 
 Usage for this script is:
 
-./compile_opencv.sh <file_name>.c
+./compile_opencv.sh \<file_name\>.c
 or
-./compile_opencv.sh <file_name>.cpp
+./compile_opencv.sh \<file_name\>.cpp
 
 
 *Step 3: Run a test program*
