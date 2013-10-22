@@ -1,0 +1,24 @@
+#summary How to format your code while writing in C++ on this project.
+
+
+A very rough draft of our C++ style guide. Will add examples and more detailed explanations later.
+
+== Headers ==
+Use header files. For the love of Tim *do not, under any circumstances, import .cpp files.*
+
+
+== Comments ==
+
+Give your functions function header comments. Be sure to include whatever a new member would need to know about the function (assumptions, specialty behavior, etc).
+
+Give your classes a class header comment. Include what other members would need to know to to use the class effectively. 
+
+In line comments should be used to describe behavior of blocks of code.
+
+== White space ==
+Indent your code properly (or let your IDE of choice format it for you).
+
+Separate blocks of code with one line of white space.
+
+== This Style Guide ==
+Update the style guide (or email a team lead) when you see a style convention in the code base that you didn't know before.
