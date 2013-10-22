@@ -1,4 +1,4 @@
-#summary How to format your code while writing in C++ on this project.
+#summary A more casual description of how to format your code while writing in C++ on this project.
 
 
 A very rough draft of our C++ style guide. Will add examples and more detailed explanations later.
