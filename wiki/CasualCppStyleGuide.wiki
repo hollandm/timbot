@@ -4,7 +4,7 @@
 A very rough draft of our C++ style guide. Will add examples and more detailed explanations later.
 
 == Headers ==
-Use header files. Please, *please do not, under any circumstances, import .cpp files.*
+Use header files. Please *do not, under any circumstances, import .cpp files.*
 
 
 == Comments ==
