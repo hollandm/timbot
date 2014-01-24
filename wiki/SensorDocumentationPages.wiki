@@ -1,0 +1,6 @@
+#Documentation Specs for our sensors.
+
+= Introduction =
+
+Sharp (old) IR Sensors
+http://sharp-world.com/products/device/lineup/data/pdf/datasheet/gp2y0a02_e.pdf
