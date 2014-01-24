@@ -22,6 +22,8 @@ time.sleep(0.1)
 serialPort.write("ADT=100 ")
 time.sleep(0.1)
 
+#this is a comment example
+
 # move one side of wheels
 serialPort.write(chr(129)+" ")
 time.sleep(0.1)
