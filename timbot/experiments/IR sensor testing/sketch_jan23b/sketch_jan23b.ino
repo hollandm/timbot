@@ -3,6 +3,7 @@
 * read from an IR sensor.
 */
 
+//the amount of times to sample per loop
 #define SAMPLE_AMOUNT 500
 
 int sensorPin = A0;
