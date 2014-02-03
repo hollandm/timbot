@@ -53,26 +53,43 @@ void loop(){
   int error;
   //Serial.println("Requesting data...");
 
-  byte accelX, accelY, accelZ;
+  byte accelData[6];
   
-  if (MPUread(ACCEL_X_H,1,&accelX) != SUCCESS){
+  
+  //read the sensor values, storing them in the struct.
+  //check for errors at the same time
+  if (MPUread(ACCEL_X_H,1,&accelData[0]) != SUCCESS){
     Serial.println("Read Error");
   }
-  if (MPUread(ACCEL_Y_H,1,&accelY) != SUCCESS){
+  if (MPUread(ACCEL_X_L,1,&accelData[1]) != SUCCESS){
     Serial.println("Read Error");
   }
-  if (MPUread(ACCEL_Z_H,1,&accelZ) != SUCCESS){
+  if (MPUread(ACCEL_Y_H,1,&accelData[2]) != SUCCESS){
     Serial.println("Read Error");
   }
-  else{
-    Serial.print("Accelleration (x y z):\t");
-    Serial.print(accelX,DEC);
-    Serial.print("\t");
-    Serial.print(accelY,DEC);
-    Serial.print("\t");
-    Serial.println(accelZ,DEC);
+  if (MPUread(ACCEL_Y_L,1,&accelData[3]) != SUCCESS){
+    Serial.println("Read Error");
   }
-  delay(50);
+  if (MPUread(ACCEL_Z_H,1,&accelData[4]) != SUCCESS){
+    Serial.println("Read Error");
+  }
+  if (MPUread(ACCEL_Z_L,1,&accelData[5]) != SUCCESS){
+    Serial.println("Read Error");
+  }
+  
+  int16_t * ptr = (int16_t *)&accelData[0];
+ 
+  //print values
+  Serial.print("Accelleration (x y z):\t");
+  Serial.print(*ptr,DEC);
+  ptr = (int16_t *)&accelData[1];
+  Serial.print("\t");
+  Serial.print(*ptr,DEC);
+  ptr = (int16_t *)&accelData[2];
+  Serial.print("\t");
+  Serial.println(*ptr,DEC);
+  
+  delay(1000);
 }
 
 /*
