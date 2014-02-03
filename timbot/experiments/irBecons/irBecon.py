@@ -7,7 +7,7 @@
 import serial, time
 
 serialPort = serial.Serial('/dev/ttyUSB0')
-arduinoPort = serial.Serial('/dev/ttyACM1')
+arduinoPort = serial.Serial('/dev/ttyACM0')
 
 
 print serialPort.portstr
@@ -30,15 +30,11 @@ def turnRight():
     print "Turn Right"
     serialPort.write(chr(129)+" ")
     time.sleep(0.1)
-    serialPort.write("VT=100000 ")
+    serialPort.write("VT=-100000 ")
     time.sleep(0.1)
     serialPort.write("G ")
     time.sleep(0.1)
-
-    return
-
-def turnLeft():
-    print "Turn Left"
+   
     # move the other side of wheels
     serialPort.write(chr(130)+" ")
     time.sleep(0.1)
@@ -46,6 +42,28 @@ def turnLeft():
     time.sleep(0.1)
     serialPort.write("G ")
     time.sleep(0.1)
+ 
+    return
+
+def turnLeft():
+    print "Turn Left"
+    # move the other side of wheels
+    serialPort.write(chr(130)+" ")
+    time.sleep(0.1)
+    serialPort.write("VT=100000 ")
+    time.sleep(0.1)
+    serialPort.write("G ")
+    time.sleep(0.1)
+    
+    serialPort.write(chr(129)+" ")
+    time.sleep(0.1)
+    serialPort.write("VT=100000 ")
+    time.sleep(0.1)
+    serialPort.write("G ")
+    time.sleep(0.1)
+
+
+
     return
 
 def stop():
@@ -72,7 +90,7 @@ while True:
     left = int(directions[1])
     right = int(directions[0])
 
-    # print directions
+    print directions
 
 
     if left < 100:
@@ -95,5 +113,5 @@ while True:
 # time.sleep(10)
 #
 
-
+arduinoPort.close()
 serialPort.close()
