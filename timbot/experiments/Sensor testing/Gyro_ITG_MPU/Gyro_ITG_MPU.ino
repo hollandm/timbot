@@ -34,6 +34,7 @@
 #define MPU_DETECTION_ERROR  -1
 #define MPU_READ_ERROR       -2
 #define MPU_WRITE_ERROR      -3
+#define MPU_ADDR_REQ_ERROR   -4
 
 int deviceI2CAddress;
 
@@ -45,10 +46,10 @@ void setup(){
   Serial.println("Scanning for an available device...");
 
   //try to find at device
-  int addressFound;
+  int addressNotFound;
   while (addressFound != 0){
-    addressFound = scanForI2C(&deviceI2CAddress);
-    if(addressFound == MPU_DETECTION_ERROR) {
+    addressNotFound = scanForI2C(&deviceI2CAddress) == MPU_DETECTION_ERROR;
+    if(addressNotFound) {
       delay(500);
       Serial.println("Device not found, trying again...");
     }
@@ -57,9 +58,11 @@ void setup(){
   Serial.print("Success! Device found at\t0x");
   Serial.println(deviceI2CAddress,HEX);
   Serial.println("Done scanning.");
-  Serial.println();
 
   //wake the sensor
+  Serial.println("Waking the Sensor...\n");
+  byte clr = 0;
+  MPUWrite(SLEEP, &clr);
 }
 
 void loop(){
@@ -70,7 +73,14 @@ void loop(){
   //get accel values
   error = getAccel((byte *)accelData);
   if (error != SUCCESS){
-    Serial.print("Error reading accelleration: ");
+    Serial.print("Error reading accellerometer: ");
+    Serial.println(error,DEC);
+  }
+  
+  int gyroData[3];
+  error = getGyro((byte *)gyroData);
+  if (error != SUCCESS){
+    Serial.print("Error reading gyroscope: ");
     Serial.println(error,DEC);
   }
   
@@ -78,24 +88,35 @@ void loop(){
   error = getTemp((byte *)tempData);
   if (error != SUCCESS) {
     Serial.print("Error reading temperature: ");
-    Serial.println(error);
+    Serial.println(error,DEC);
   }
   
-  //convert to C
-  tempData[0] = tempData[0]/340 + 36.53;
+  //convert to Celsius
+  double tempC = tempData[0]/340.0 + 36.53;
+  double tempF = tempC*1.8 + 32.0;
   
   //print values
-  Serial.print("Accelleration (x y z):\t");
+  Serial.print("Accellerometer (x y z):\t");
   Serial.print(accelData[0],DEC);
   Serial.print("\t");
   Serial.print(accelData[1],DEC);
   Serial.print("\t");
   Serial.println(accelData[2],DEC);
   
-  Serial.print("Temp:\t");
-  Serial.print(tempData[0],DEC);
-  Serial.println(" degrees C");
+  Serial.print("Gyroscope (x y z):\t");
+  Serial.print(gyroData[0],DEC);
+  Serial.print("\t");
+  Serial.print(gyroData[1],DEC);
+  Serial.print("\t");
+  Serial.println(gyroData[2],DEC);
   
+  Serial.print("Temp:\t");
+  Serial.print(tempC,DEC);
+  Serial.print(" degrees C,\n\t");
+  Serial.print(tempF,DEC);
+  Serial.println(" degrees F.");
+  
+
   Serial.println();
   delay(1000);
 }
