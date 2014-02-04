@@ -6,7 +6,7 @@
 #define SAMPLE_AMOUNT 500
 
 int sensorPin = A0;
-int sensorValue = 0;
+long sensorValue = 0;
 
 void setup() {
   Serial.begin(9600);
