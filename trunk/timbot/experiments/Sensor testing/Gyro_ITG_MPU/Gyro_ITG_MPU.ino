@@ -1,20 +1,32 @@
 /*
 * The MPU-6050 is a combination sensor including temp, gyro and accel.
- * http://invensense.com/mems/gyro/documents/RM-MPU-6000A.pdf
+ * Device datasheet: http://invensense.com/mems/gyro/documents/RM-MPU-6000A.pdf
  * 
  * Author: Jaimiey Sears
+ * Revision: 2-3-2014
  */
 
 #include <Wire.h>
 
-//device Hex codes to retrieve various values
-#define SLEEP 0x6B
+//device Hex codes to retrieve various values.
+//codes can be found in the datasheet linked above
+#define SLEEP      0x6B
 #define ACCEL_X_H  0x3B
 #define ACCEL_X_L  0x3C
 #define ACCEL_Y_H  0x3D
 #define ACCEL_Y_L  0x3E
 #define ACCEL_Z_H  0x3F
 #define ACCEL_Z_L  0x40
+ 
+#define TEMP_H     0x41
+#define TEMP_L     0x42
+
+#define GYRO_X_H   0x43
+#define GYRO_X_L   0x44
+#define GYRO_Y_H   0x45
+#define GYRO_Y_L   0x46
+#define GYRO_Z_H   0x47
+#define GYRO_Z_L   0x48
 
 //define different things that can go wrong
 //(for debugging purposes)
@@ -36,7 +48,8 @@ void setup(){
   int addressFound;
   while (addressFound != 0){
     addressFound = scanForI2C(&deviceI2CAddress);
-    if(addressFound == -1) {
+    if(addressFound == MPU_DETECTION_ERROR) {
+      delay(500);
       Serial.println("Device not found, trying again...");
     }
   }
@@ -51,44 +64,39 @@ void setup(){
 
 void loop(){
   int error;
-  //Serial.println("Requesting data...");
+  Serial.println("Requesting data...");
 
-  byte accelData[6];
-  
-  
-  //read the sensor values, storing them in the struct.
-  //check for errors at the same time
-  if (MPUread(ACCEL_X_H,1,&accelData[0]) != SUCCESS){
-    Serial.println("Read Error");
-  }
-  if (MPUread(ACCEL_X_L,1,&accelData[1]) != SUCCESS){
-    Serial.println("Read Error");
-  }
-  if (MPUread(ACCEL_Y_H,1,&accelData[2]) != SUCCESS){
-    Serial.println("Read Error");
-  }
-  if (MPUread(ACCEL_Y_L,1,&accelData[3]) != SUCCESS){
-    Serial.println("Read Error");
-  }
-  if (MPUread(ACCEL_Z_H,1,&accelData[4]) != SUCCESS){
-    Serial.println("Read Error");
-  }
-  if (MPUread(ACCEL_Z_L,1,&accelData[5]) != SUCCESS){
-    Serial.println("Read Error");
+  int accelData[3];  //place to store values
+  //get accel values
+  error = getAccel((byte *)accelData);
+  if (error != SUCCESS){
+    Serial.print("Error reading accelleration: ");
+    Serial.println(error,DEC);
   }
   
-  int16_t * ptr = (int16_t *)&accelData[0];
- 
+  int tempData[1];
+  error = getTemp((byte *)tempData);
+  if (error != SUCCESS) {
+    Serial.print("Error reading temperature: ");
+    Serial.println(error);
+  }
+  
+  //convert to C
+  tempData[0] = tempData[0]/340 + 36.53;
+  
   //print values
   Serial.print("Accelleration (x y z):\t");
-  Serial.print(*ptr,DEC);
-  ptr = (int16_t *)&accelData[1];
+  Serial.print(accelData[0],DEC);
   Serial.print("\t");
-  Serial.print(*ptr,DEC);
-  ptr = (int16_t *)&accelData[2];
+  Serial.print(accelData[1],DEC);
   Serial.print("\t");
-  Serial.println(*ptr,DEC);
+  Serial.println(accelData[2],DEC);
   
+  Serial.print("Temp:\t");
+  Serial.print(tempData[0],DEC);
+  Serial.println(" degrees C");
+  
+  Serial.println();
   delay(1000);
 }
 
