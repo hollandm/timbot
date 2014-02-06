@@ -1,14 +1,3 @@
-int beginRecording () {
-  if (recording){
-    return ALREADY_RECORDING;
-  }
-  recording = true;
-  return SUCCESS;
-}
-
-void endRecording() {
-  recording = false;
-}
 
 void extrapolate(int * a, int * v, int * s) {
     *v += *a;
@@ -22,4 +11,10 @@ void reportData(){
   Serial.print(*mostRecentV,DEC);
   Serial.print(" S: ");
   Serial.println(*mostRecentS,DEC);
+}
+
+void clearData(){
+  *mostRecentA = 0;
+  *mostRecentV = 0;
+  *mostRecentS = 0;
 }

@@ -29,9 +29,10 @@
 #define GYRO_Z_L   0x48
 
 //defined input commands
-#define CMD_GO  'g'
-#define CMD_STOP  's'
+#define CMD_GO      'g'
+#define CMD_STOP    's'
 #define CMD_REPORT  'd'
+#define CMD_CLR     'c'
 
 //define different things that can go wrong
 //(for debugging purposes)
@@ -40,14 +41,13 @@
 #define MPU_READ_ERROR       -2
 #define MPU_WRITE_ERROR      -3
 #define MPU_ADDR_REQ_ERROR   -4
-#define ALREADY_RECORDING    -5
 
 int deviceI2CAddress;
 boolean recording = false;
-
-int * mostRecentA = NULL;
-int * mostRecentV = NULL;
-int * mostRecentS = NULL;
+int * mostRecentA = (int*)malloc(sizeof(int));
+int * mostRecentV = (int*)malloc(sizeof(int));
+int * mostRecentS = (int*)malloc(sizeof(int));
+      
 
 void setup(){
   Wire.begin();  //set up I2C bus
@@ -74,7 +74,10 @@ void setup(){
   Serial.print("Waking the Sensor...");
   byte clr = 0;
   MPUWrite(SLEEP, &clr);
-  Serial.println(" done!");
+  Serial.println(" done!\n");
+  
+  clearData();
+  
 }
 
 void loop(){
@@ -88,20 +91,27 @@ void loop(){
     //how to react
     switch (msg) {
     case CMD_GO:
-      beginRecording();
+      recording = true;
+      Serial.println("Recording...");
+      break;
     case CMD_STOP:
-      endRecording();
+      recording = false;
       Serial.println("...stopped.");
       break;
     case CMD_REPORT:
       Serial.println("Sending data...");
       reportData();
       break;
+    case CMD_CLR:
+      clearData();
+      Serial.println("Data deleted.");
+      break;
     default:
       Serial.println("I don't understand that command.");
     }
   }
-
+  
+  //get the sensor values, checking for errors
   int accelData[3];  //place to store values
   //get accel values
   error = getAccel((byte *)accelData);
@@ -126,21 +136,29 @@ void loop(){
 
   //convert to Celsius
   double tempC = tempData[0]/340.0 + 36.53;
+  //convert to Ferenheight
   double tempF = tempC*1.8 + 32.0;
-
-  *mostRecentA = accelData[1]; //y
+  
+  //using the y-direction...
+  if(abs(accelData[1]) < 1000){
+    *mostRecentA = 0;
+  }else{
+    *mostRecentA = accelData[1];
+  }
+  
   if(recording){
     extrapolate(mostRecentA,mostRecentV,mostRecentS);
   }
+  
   delay(50);
 }
 
 /*
-* The function looks for a device
- * @param  a the address of the variable to write the device address to.
- * @return  0 success
- * @return  -1 failure
- */
+* The function looks for a device. it stops at the first device it finds.
+* @param  a the address of the variable to write the device address to.
+* @return  0 success
+* @return  -1 failure
+*/
 int scanForI2C(int * a){
   byte error;
   for(byte addr = 1; addr < 127; addr++){
