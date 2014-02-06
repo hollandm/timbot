@@ -46,8 +46,8 @@ void setup(){
   Serial.println("Scanning for an available device...");
 
   //try to find at device
-  int addressNotFound = true;
-  while (addressNotFound){
+  int addressNotFound;
+  while (addressFound != 0){
     addressNotFound = scanForI2C(&deviceI2CAddress) == MPU_DETECTION_ERROR;
     if(addressNotFound) {
       delay(500);
