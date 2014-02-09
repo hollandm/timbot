@@ -8,6 +8,8 @@
 
 #include <Wire.h>
 
+#define SAMPLE_AMOUNT 100
+
 //device Hex codes to retrieve various values.
 //codes can be found in the datasheet linked above
 #define SLEEP      0x6B
@@ -47,7 +49,9 @@ boolean recording = false;
 int * mostRecentA = (int*)malloc(sizeof(int));
 int * mostRecentV = (int*)malloc(sizeof(int));
 int * mostRecentS = (int*)malloc(sizeof(int));
-      
+
+int avg[SAMPLE_AMOUNT] = {0};
+int loopCount = 0;
 
 void setup(){
   Wire.begin();  //set up I2C bus
@@ -75,9 +79,9 @@ void setup(){
   byte clr = 0;
   MPUWrite(SLEEP, &clr);
   Serial.println(" done!\n");
-  
+
   clearData();
-  
+
 }
 
 void loop(){
@@ -87,7 +91,7 @@ void loop(){
   byte msg;
   if (Serial.available() > 0){
     msg = Serial.read();
-    
+
     //how to react
     switch (msg) {
     case CMD_GO:
@@ -110,7 +114,7 @@ void loop(){
       Serial.println("I don't understand that command.");
     }
   }
-  
+
   //get the sensor values, checking for errors
   int accelData[3];  //place to store values
   //get accel values
@@ -138,39 +142,27 @@ void loop(){
   double tempC = tempData[0]/340.0 + 36.53;
   //convert to Ferenheight
   double tempF = tempC*1.8 + 32.0;
-  
+
   //using the y-direction...
-  if(abs(accelData[1]) < 1000){
-    *mostRecentA = 0;
-  }else{
-    *mostRecentA = accelData[1];
+  int rAvg = runningAverage(avg);
+  avg[0] = accelData[1];
+  if (loopCount % 100 == 0){
+    Serial.print(accelData[1],DEC);
+    Serial.print("\t");
+    Serial.println(rAvg,DEC);
   }
-  
+
+
+  *mostRecentA = accelData[1];
+
   if(recording){
     extrapolate(mostRecentA,mostRecentV,mostRecentS);
   }
-  
+
   delay(50);
+  loopCount++;
 }
 
-/*
-* The function looks for a device. it stops at the first device it finds.
-* @param  a the address of the variable to write the device address to.
-* @return  0 success
-* @return  -1 failure
-*/
-int scanForI2C(int * a){
-  byte error;
-  for(byte addr = 1; addr < 127; addr++){
-    Wire.beginTransmission(addr);
-    error = Wire.endTransmission();
-    if(error == 0){
-      *a = (int)addr; //write the address found to the global var
-      return SUCCESS;
-    }
-  }
-  //if no devices found, return the error
-  return MPU_DETECTION_ERROR;
-}
+
 
 
