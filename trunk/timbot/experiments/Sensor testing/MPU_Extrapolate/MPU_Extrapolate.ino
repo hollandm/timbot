@@ -8,7 +8,7 @@
 
 #include <Wire.h>
 
-#define SAMPLE_AMOUNT 100
+#define SAMPLE_AMOUNT 5
 
 //device Hex codes to retrieve various values.
 //codes can be found in the datasheet linked above
@@ -46,11 +46,14 @@
 
 int deviceI2CAddress;
 boolean recording = false;
-int * mostRecentA = (int*)malloc(sizeof(int));
-int * mostRecentV = (int*)malloc(sizeof(int));
-int * mostRecentS = (int*)malloc(sizeof(int));
 
-int avg[SAMPLE_AMOUNT] = {0};
+//used for a running average
+int avgX[SAMPLE_AMOUNT] = {
+  0};
+int avgY[SAMPLE_AMOUNT] = {
+  0};
+int avgZ[SAMPLE_AMOUNT] = {
+  0};
 int loopCount = 0;
 
 void setup(){
@@ -80,41 +83,41 @@ void setup(){
   MPUWrite(SLEEP, &clr);
   Serial.println(" done!\n");
 
-  clearData();
 
 }
 
+//==============================================================
 void loop(){
   int error;
-
+  /*
   //listen for serial commands
-  byte msg;
-  if (Serial.available() > 0){
-    msg = Serial.read();
-
-    //how to react
-    switch (msg) {
-    case CMD_GO:
-      recording = true;
-      Serial.println("Recording...");
-      break;
-    case CMD_STOP:
-      recording = false;
-      Serial.println("...stopped.");
-      break;
-    case CMD_REPORT:
-      Serial.println("Sending data...");
-      reportData();
-      break;
-    case CMD_CLR:
-      clearData();
-      Serial.println("Data deleted.");
-      break;
-    default:
-      Serial.println("I don't understand that command.");
-    }
-  }
-
+   byte msg;
+   if (Serial.available() > 0){
+   msg = Serial.read();
+   
+   //how to react
+   switch (msg) {
+   case CMD_GO:
+   recording = true;
+   Serial.println("Recording...");
+   break;
+   case CMD_STOP:
+   recording = false;
+   Serial.println("...stopped.");
+   break;
+   case CMD_REPORT:
+   Serial.println("Sending data...");
+   reportData();
+   break;
+   case CMD_CLR:
+   clearData();
+   Serial.println("Data deleted.");
+   break;
+   default:
+   Serial.println("I don't understand that command.");
+   }
+   }
+   */
   //get the sensor values, checking for errors
   int accelData[3];  //place to store values
   //get accel values
@@ -144,24 +147,50 @@ void loop(){
   double tempF = tempC*1.8 + 32.0;
 
   //using the y-direction...
+  /*
   int rAvg = runningAverage(avg);
-  avg[0] = accelData[1];
-  if (loopCount % 100 == 0){
-    Serial.print(accelData[1],DEC);
+   avg[0] = accelData[1];
+   if (loopCount % 100 == 0){
+   Serial.print(accelData[1],DEC);
+   Serial.print("\t");
+   Serial.println(rAvg,DEC);
+   }
+   
+   
+   *mostRecentA = accelData[1];
+   
+   if(recording){
+   extrapolate(mostRecentA,mostRecentV,mostRecentS);
+   }
+   */
+
+  int averagedAccel[3];
+  //take the running average
+  shiftArray(avgX,accelData[0]);
+  averagedAccel[0] = sumArray(avgX)/SAMPLE_AMOUNT;
+  shiftArray(avgY,accelData[1]);
+  averagedAccel[1] = sumArray(avgY)/SAMPLE_AMOUNT;
+  shiftArray(avgZ,accelData[2]);
+  averagedAccel[2] = sumArray(avgZ)/SAMPLE_AMOUNT;
+
+
+  if(loopCount < 250){
+    Serial.print(loopCount);
     Serial.print("\t");
-    Serial.println(rAvg,DEC);
+    Serial.print(averagedAccel[0]);
+    Serial.print("\t");
+    Serial.print(averagedAccel[1]);
+    Serial.print("\t");
+    Serial.print(averagedAccel[2]);
+    Serial.println();
   }
-
-
-  *mostRecentA = accelData[1];
-
-  if(recording){
-    extrapolate(mostRecentA,mostRecentV,mostRecentS);
-  }
-
   delay(50);
+
   loopCount++;
 }
+
+
+
 
 
 

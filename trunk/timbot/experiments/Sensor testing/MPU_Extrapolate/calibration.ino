@@ -2,23 +2,23 @@
 //using pointers.
 //also moves the whole array down one.
 int runningAverage(int * input){
-  int sum;
+  int sum=0;
   for(int i = 0; i < SAMPLE_AMOUNT; i++){
     sum += *(input + i);
-    //move each datum to a HIGHER position in the array
-    if (i > 0) {
-      *(input + i) = *(input + i - 1);
-    }
   }
-  return sum/SAMPLE_AMOUNT;
+  for(int i = SAMPLE_AMOUNT-1; i > 0; i--){
+    //move each datum to a HIGHER position in the array
+    *(input + i) = *(input + i - 1);
+  }
+  return (sum/SAMPLE_AMOUNT);
 }
 
 /*
 * The function looks for a device. it stops at the first device it finds.
-* @param  a the address of the variable to write the device address to.
-* @return  0 success
-* @return  -1 failure
-*/
+ * @param  a the address of the variable to write the device address to.
+ * @return  0 success
+ * @return  -1 failure
+ */
 int scanForI2C(int * a){
   byte error;
   for(byte addr = 1; addr < 127; addr++){
@@ -32,4 +32,5 @@ int scanForI2C(int * a){
   //if no devices found, return the error
   return MPU_DETECTION_ERROR;
 }
+
 
