@@ -13,19 +13,26 @@ int getAccel(byte * dataLoc) {
   //(L should be the 1st element in the array for conversion to int)
   //the values are stored {X_L, X_H, Y_L, Y_H, Z_L, Z_H}
   
+  if (error = MPURead(ACCEL_X_L, &dataLoc[0]) != SUCCESS){
+    return error;
+  }
   if (error = MPURead(ACCEL_X_H, &dataLoc[1]) != SUCCESS){
+    return error;
+  }
+  
+  if (error = MPURead(ACCEL_Y_L, &dataLoc[2]) != SUCCESS){
     return error;
   }
   if (error = MPURead(ACCEL_Y_H, &dataLoc[3]) != SUCCESS){
     return error;
   }
+  
+  if (MPURead(ACCEL_Z_L, &dataLoc[4]) != SUCCESS){
+    return error;
+  }
   if (MPURead(ACCEL_Z_H, &dataLoc[5]) != SUCCESS){
     return error;
   }
-  
-  dataLoc[0] = 0x00;
-  dataLoc[2] = 0x00;
-  dataLoc[4] = 0x00;
   return SUCCESS;
 };
 

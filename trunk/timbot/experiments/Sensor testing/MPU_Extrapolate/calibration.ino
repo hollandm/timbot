@@ -1,18 +1,3 @@
-//sums up an array of size SAMPLE_AMOUNT
-//using pointers.
-//also moves the whole array down one.
-int runningAverage(int * input){
-  int sum=0;
-  for(int i = 0; i < SAMPLE_AMOUNT; i++){
-    sum += *(input + i);
-  }
-  for(int i = SAMPLE_AMOUNT-1; i > 0; i--){
-    //move each datum to a HIGHER position in the array
-    *(input + i) = *(input + i - 1);
-  }
-  return (sum/SAMPLE_AMOUNT);
-}
-
 /*
 * The function looks for a device. it stops at the first device it finds.
  * @param  a the address of the variable to write the device address to.
