@@ -1,6 +1,5 @@
 import serial, time
-# As of 2/14/14 this file will no longer be updated.
-# It has been moved into the prototype code hardwareInterfaces/animaticsMotors.py
+
 
 ##
 # motorController

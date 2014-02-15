@@ -1,0 +1,16 @@
+This contains instructions to setup this program on the bot top.
+
+1. Plug the smart motors and bucket arduino into the bot top
+2. Log into the bot top, the password is timbot2
+3. Open terminal, start->System Tools->xterm
+4. Run the following commands in terminal to enable read write access to the arduino and motors
+    (if you unplug them you will need to repeat this step)
+    sudo chmod 777 /dev/ttyUSB0
+    sudo chmod 777 /dev/ttyACM0
+5. Run the following command to get to the directory with the demo program
+    cd ~/svn/timbot/trunk/timbot/Demos/E-Week/Robot/
+6. Connect the bot top to the network (Click bars icon in bottom right corner of screen)
+7. Begin the program with the following command
+    python main.py
+8. Close the computer, and the case.
+

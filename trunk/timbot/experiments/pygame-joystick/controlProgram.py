@@ -140,7 +140,7 @@ class control:
         if self.dualJoysticks:
             # it is annoying to have to physically swap around the joysticks
             # lets just have a button on each joystick which we press to make that joystick the left
-            if self.right_joystick.get_button(4) == 1:
+            if self.left_joystick.get_button(4) == 1:
                 print "Swapped Joysticks"
                 temp = self.right_joystick
                 self.right_joystick = self.left_joystick
@@ -163,7 +163,7 @@ class control:
             # Reset
             self.joyData[6] = max(self.left_joystick.get_button(3), self.right_joystick.get_button(3))*255
             if self.joyData[6] > 0:
-                print "Reseting Motors"
+                print "Resetting Motors"
 
 
         else:
