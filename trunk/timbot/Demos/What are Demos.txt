@@ -1,0 +1,5 @@
+The demos folder is intended for us to house fully working programs that
+demonstrate functionality and look cool. The intent is that they are quick to setup.
+
+Code quality is less important here than in other portions since these are one off programs that will
+most likely not be modified after being written.
