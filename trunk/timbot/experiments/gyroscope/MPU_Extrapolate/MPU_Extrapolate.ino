@@ -67,7 +67,8 @@ int avgZ[SAMPLE_AMOUNT] = {
 int averaged[2] = {0};
 int loopCount = 0;
 int mode = STOPPED;
-int vel = 0;
+long velZ = 0;
+long posZ = 0;
 
 void setup(){
   Wire.begin();  //set up I2C bus
@@ -141,32 +142,30 @@ void loop(){
   averagedAccel[2] = sumArray(avgZ)/SAMPLE_AMOUNT;
 
   //put y into the averaged array
-  shiftArray(averaged,averagedAccel[1],2);
+  shiftArray(averaged,averagedAccel[2],2);
   if (analyze(averaged)!= UNCHANGED){
     mode = analyze(averaged);
   }
   if (mode == STARTING){
-    vel += averaged[0];
+    velZ += averaged[0];
   }
   if (mode == STOPPED){
-    vel = 0;
+    velZ = 0;
   }
   //assume it is opposite (still adding them)
   if (mode == STOPPING){
-    vel += averaged[0];
+    velZ += averaged[0];
   }
   
+  posZ += velZ;
+  
 
-  if(loopCount < 250){
-    Serial.print(loopCount);
-    Serial.print("\t");
-    Serial.print(averagedAccel[0]);
-    Serial.print("\t");
-    Serial.print(averagedAccel[1]);
-    Serial.print("\t");
+  if(loopCount < 500){
     Serial.print(averagedAccel[2]);
     Serial.print("\t");
-    Serial.print(vel);
+    Serial.print(velZ);
+    Serial.print("\t");
+    Serial.print(posZ);
     Serial.println();
   }
   delay(50);

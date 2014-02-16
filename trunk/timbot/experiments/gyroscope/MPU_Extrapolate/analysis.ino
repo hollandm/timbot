@@ -10,7 +10,7 @@ int analyze(int * arry){
   else if(mode == STARTING && abs(arry[0]) < 500){
     return GOING;
   }
-  else if(mode == GOING && abs(arry[0] > 1000)){
+  else if(mode == GOING && abs(arry[0]) > 1000){
     return STOPPING;
   }
   return UNCHANGED;
