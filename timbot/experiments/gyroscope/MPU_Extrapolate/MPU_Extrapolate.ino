@@ -44,6 +44,14 @@
 #define MPU_WRITE_ERROR      -3
 #define MPU_ADDR_REQ_ERROR   -4
 
+
+//analysis constants
+#define STOPPED   0
+#define STARTING  1
+#define GOING     2
+#define STOPPING  3
+#define UNCHANGED 4
+
 int deviceI2CAddress;
 boolean recording = false;
 
@@ -54,7 +62,12 @@ int avgY[SAMPLE_AMOUNT] = {
   0};
 int avgZ[SAMPLE_AMOUNT] = {
   0};
+  
+//used for data analysis
+int averaged[2] = {0};
 int loopCount = 0;
+int mode = STOPPED;
+int vel = 0;
 
 void setup(){
   Wire.begin();  //set up I2C bus
@@ -89,35 +102,7 @@ void setup(){
 //==============================================================
 void loop(){
   int error;
-  /*
-  //listen for serial commands
-   byte msg;
-   if (Serial.available() > 0){
-   msg = Serial.read();
-   
-   //how to react
-   switch (msg) {
-   case CMD_GO:
-   recording = true;
-   Serial.println("Recording...");
-   break;
-   case CMD_STOP:
-   recording = false;
-   Serial.println("...stopped.");
-   break;
-   case CMD_REPORT:
-   Serial.println("Sending data...");
-   reportData();
-   break;
-   case CMD_CLR:
-   clearData();
-   Serial.println("Data deleted.");
-   break;
-   default:
-   Serial.println("I don't understand that command.");
-   }
-   }
-   */
+  
   //get the sensor values, checking for errors
   int accelData[3];  //place to store values
   //get accel values
@@ -146,33 +131,31 @@ void loop(){
   //convert to Ferenheight
   double tempF = tempC*1.8 + 32.0;
 
-  //using the y-direction...
-  /*
-  int rAvg = runningAverage(avg);
-   avg[0] = accelData[1];
-   if (loopCount % 100 == 0){
-   Serial.print(accelData[1],DEC);
-   Serial.print("\t");
-   Serial.println(rAvg,DEC);
-   }
-   
-   
-   *mostRecentA = accelData[1];
-   
-   if(recording){
-   extrapolate(mostRecentA,mostRecentV,mostRecentS);
-   }
-   */
-
   int averagedAccel[3];
   //take the running average
-  shiftArray(avgX,accelData[0]);
+  shiftArray(avgX,accelData[0],SAMPLE_AMOUNT);
   averagedAccel[0] = sumArray(avgX)/SAMPLE_AMOUNT;
-  shiftArray(avgY,accelData[1]);
+  shiftArray(avgY,accelData[1],SAMPLE_AMOUNT);
   averagedAccel[1] = sumArray(avgY)/SAMPLE_AMOUNT;
-  shiftArray(avgZ,accelData[2]);
+  shiftArray(avgZ,accelData[2],SAMPLE_AMOUNT);
   averagedAccel[2] = sumArray(avgZ)/SAMPLE_AMOUNT;
 
+  //put y into the averaged array
+  shiftArray(averaged,averagedAccel[1],2);
+  if (analyze(averaged)!= UNCHANGED){
+    mode = analyze(averaged);
+  }
+  if (mode == STARTING){
+    vel += averaged[0];
+  }
+  if (mode == STOPPED){
+    vel = 0;
+  }
+  //assume it is opposite (still adding them)
+  if (mode == STOPPING){
+    vel += averaged[0];
+  }
+  
 
   if(loopCount < 250){
     Serial.print(loopCount);
@@ -182,6 +165,8 @@ void loop(){
     Serial.print(averagedAccel[1]);
     Serial.print("\t");
     Serial.print(averagedAccel[2]);
+    Serial.print("\t");
+    Serial.print(vel);
     Serial.println();
   }
   delay(50);

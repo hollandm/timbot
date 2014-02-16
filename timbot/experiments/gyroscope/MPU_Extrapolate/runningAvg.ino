@@ -9,8 +9,8 @@ long sumArray(int * input){
 
 //shifts all the elements in an array up one
 //inserts first into the input[0] position
-void shiftArray(int * input,int first){
-  for(int i = SAMPLE_AMOUNT-1; i > 0; i--){
+void shiftArray(int * input,int first, int size){
+  for(int i = size-1; i > 0; i--){
     //move each datum to a HIGHER position in the array
     *(input + i) = *(input + i - 1);
   }
