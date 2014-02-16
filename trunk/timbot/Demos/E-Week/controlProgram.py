@@ -21,6 +21,8 @@ class control:
     COLOR_BACKGROUND_TEXT = (0, 0, 0)
 
     UDP_IP = "224.0.0.1"
+    #Use this one for testing on the normal wireless network
+    #UDP_IP = "127.0.0.1"
     UDP_PORT = 6000
 
     ## __init__
@@ -139,7 +141,7 @@ class control:
 
         if self.dualJoysticks:
             # it is annoying to have to physically swap around the joysticks
-            # lets just have a button on each joystick which we press to make that joystick the left
+            # lets just have a button on each joystick which we press to make that joystick the right
             if self.left_joystick.get_button(4) == 1:
                 print "Swapped Joysticks"
                 temp = self.right_joystick
