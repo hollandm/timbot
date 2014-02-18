@@ -5,5 +5,5 @@ sudo chmod 777 /dev/ttyUSB0
 sudo chmod 777 /dev/ttyACM0
 
 #run the E-Week Demo
-python ~/svn/timbot/trunk/timbot/Demos/E-Week/Robot/
+python ~/svn/timbot/trunk/timbot/Demos/E-Week/Robot/main.py
 
