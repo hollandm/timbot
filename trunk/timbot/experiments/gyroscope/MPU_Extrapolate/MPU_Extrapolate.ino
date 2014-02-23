@@ -30,12 +30,6 @@
 #define GYRO_Z_H   0x47
 #define GYRO_Z_L   0x48
 
-//defined input commands
-#define CMD_GO      'g'
-#define CMD_STOP    's'
-#define CMD_REPORT  'd'
-#define CMD_CLR     'c'
-
 //define different things that can go wrong
 //(for debugging purposes)
 #define SUCCESS               0
@@ -53,22 +47,18 @@
 #define UNCHANGED 4
 
 int deviceI2CAddress;
-boolean recording = false;
 
 //used for a running average
-int avgX[SAMPLE_AMOUNT] = {
-  0};
-int avgY[SAMPLE_AMOUNT] = {
-  0};
-int avgZ[SAMPLE_AMOUNT] = {
-  0};
+int avgX[SAMPLE_AMOUNT] = {0};
+int avgY[SAMPLE_AMOUNT] = {0};
+int avgZ[SAMPLE_AMOUNT] = {0};
   
 //used for data analysis
-int averaged[2] = {0};
-int loopCount = 0;
+int averaged[3][2] = {{0}};
+long vel[] = {0};
+long pos[] = {0};
 int mode = STOPPED;
-long velZ = 0;
-long posZ = 0;
+int loopCount = 0;
 
 void setup(){
   Wire.begin();  //set up I2C bus
@@ -111,6 +101,7 @@ void loop(){
   if (error != SUCCESS){
     Serial.print("Error reading accellerometer: ");
     Serial.println(error,DEC);
+    return;
   }
 
   int gyroData[3];
@@ -118,6 +109,7 @@ void loop(){
   if (error != SUCCESS){
     Serial.print("Error reading gyroscope: ");
     Serial.println(error,DEC);
+    return;
   }
 
   int tempData[1];
@@ -125,6 +117,7 @@ void loop(){
   if (error != SUCCESS) {
     Serial.print("Error reading temperature: ");
     Serial.println(error,DEC);
+    return;
   }
 
   //convert to Celsius
@@ -140,9 +133,10 @@ void loop(){
   averagedAccel[1] = sumArray(avgY)/SAMPLE_AMOUNT;
   shiftArray(avgZ,accelData[2],SAMPLE_AMOUNT);
   averagedAccel[2] = sumArray(avgZ)/SAMPLE_AMOUNT;
-
-  //put y into the averaged array
-  shiftArray(averaged,averagedAccel[2],2);
+  
+  /*
+  //put accel data into the averaged array
+  shiftArray(averaged[2],averagedAccel[2],2);
   if (analyze(averaged)!= UNCHANGED){
     mode = analyze(averaged);
   }
@@ -157,17 +151,27 @@ void loop(){
     velZ += averaged[0];
   }
   
-  posZ += velZ;
+  pos[0] += vel[0];
+  pos[1] += vel[1];
+  pos[2] += vel[2];
   
 
   if(loopCount < 500){
     Serial.print(averagedAccel[2]);
     Serial.print("\t");
-    Serial.print(velZ);
+    Serial.print(vel[2]);
     Serial.print("\t");
-    Serial.print(posZ);
+    Serial.print(pos[2]);
     Serial.println();
   }
+  */
+  Serial.print(averagedAccel[0]);
+  Serial.print("\t");
+  Serial.print(averagedAccel[1]);
+  Serial.print("\t");
+  Serial.print(averagedAccel[2]);
+  Serial.print("\t");
+  Serial.println(sumArray(averagedAccel));
   delay(50);
 
   loopCount++;
