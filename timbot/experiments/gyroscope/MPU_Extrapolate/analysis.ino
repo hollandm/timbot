@@ -1,5 +1,6 @@
 //compares the elements in the array
 int analyze(int * arry){
+  
   if(mode == STOPPING && abs(arry[0]) < 500){
     return STOPPED;
   }
