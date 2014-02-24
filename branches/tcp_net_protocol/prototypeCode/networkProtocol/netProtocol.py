@@ -1,6 +1,6 @@
 import socket
 import struct
-import sys
+import time
 
 
 class udpHandshake:
@@ -85,8 +85,9 @@ class netManager:
                 tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 # print addr
 
-                tcpSock.connect((addr, self.TCP_PORT))
+                # time.sleep(1)
 
+                tcpSock.connect((addr, self.TCP_PORT))
                 self.connections[deviceId] = tcpSock
 
                 devicesConnected += 1
