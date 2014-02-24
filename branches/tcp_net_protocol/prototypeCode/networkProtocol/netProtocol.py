@@ -1,21 +1,113 @@
-# This file contains various constants and helper methods used by the networking system
+import socket
+import struct
+import sys
 
-# How many bytes will we send in each packet
-PACKET_SIZE = 10
-PACKET_HEADER_SIZE = 3
 
-#Where in the byte array, the numeric id of the sender is stored
-SENDER_ID_SLOT = 0
+class udpHandshake:
 
-#Where in the byte array, the numeric id of the destination is stored
-DESTINATION_ID_SLOT = 1
+    UDP_IP = "224.0.0.1"
+    UDP_PORT = 6000
+    UDP_MAX_PACKET_SIZE = 1025
 
-#Where in the byte array, the numeric id of the type of message being sent
-MESSAGE_TYPE_SLOT = 2
+    ##
+    # Constructor
+    #
+    # Description: opens a udp socket to send and recieve handshake messages
+    #
+    def __init__(self, deviceId):
+        self.deviceId = deviceId
 
-#Where in the byte array, the data to send across the network
-DATA_START_SLOT = 3
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.bind(('', self.UDP_PORT))
 
+        mreq = struct.pack("=4sl", socket.inet_aton(self.UDP_IP), socket.INADDR_ANY)
+
+        sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+
+        self.socket = sock
+
+        return
+
+
+    ##
+    # receiveHandshake
+    #
+    # Description: sends the device id over udp, giving the client the information it needs to open a tcp connection
+    #
+    def sendHandshake(self):
+
+        self.socket.sendto(self.deviceId, (self.UDP_IP, self.UDP_PORT))
+
+        return
+
+    ##
+    # receiveHandshake
+    #
+    # Description: gets the device id and address who just send a handshake
+    #
+    def receiveHandshake(self):
+        deviceId, addr = self.socket.recvfrom(self.UDP_MAX_PACKET_SIZE)
+
+        return deviceId, addr[0]
+
+    ##
+    # close
+    #
+    # Description: Closes the socket
+    #
+    def close(self):
+        self.socket.close()
+
+
+class netManager:
+
+    ##
+    # Constructor
+    #
+    #
+    #
+    def __init__(self, deviceId, isHub, numDevices=0):
+
+
+        TCP_PORT = 6001
+        connections = {}
+
+        hs = udpHandshake(deviceId)
+
+        if isHub:
+            devicesConnected = 0
+
+            while devicesConnected < numDevices:
+                deviceId, addr = hs.receiveHandshake()
+
+                tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                print addr
+
+                tcpSock.connect((addr, TCP_PORT))
+
+                connections[deviceId] = tcpSock
+
+                devicesConnected += 1
+
+        else:
+
+
+            tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            tcpSock.bind(('', TCP_PORT))
+
+            hs.sendHandshake()
+            tcpSock.listen(1)
+
+
+            connections["hub"] = tcpSock
+
+        hs.close()
+        return
+
+
+    def close(self):
+        return
 
 #If the message type slot is 0 then stop
 MESSAGE_TYPE_ESTOP = 0
@@ -23,8 +115,3 @@ MESSAGE_TYPE_HEARTBEAT = 1
 MESSAGE_TYPE_SET_MODE = 2
 MESSAGE_TYPE_MANUAL_COMMAND = 3
 
-UDP_IP = "224.0.0.1"
-UDP_PORT = 6000
-
-def getMessageType(message):
-    return message[MESSAGE_TYPE_SLOT]
