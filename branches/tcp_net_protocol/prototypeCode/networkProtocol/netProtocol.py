@@ -7,12 +7,12 @@ class udpHandshake:
 
     UDP_IP = "224.0.0.1"
     UDP_PORT = 6000
-    UDP_MAX_PACKET_SIZE = 1025
+    UDP_MAX_PACKET_SIZE = 1024
 
     ##
     # Constructor
     #
-    # Description: opens a udp socket to send and recieve handshake messages
+    # Description: opens a udp socket to send and receive handshake messages
     #
     def __init__(self, deviceId):
         self.deviceId = deviceId
@@ -33,7 +33,8 @@ class udpHandshake:
     ##
     # receiveHandshake
     #
-    # Description: sends the device id over udp, giving the client the information it needs to open a tcp connection
+    # Description: sends the device id over udp, giving the client the
+    #   information it needs to open a tcp connection
     #
     def sendHandshake(self):
 
@@ -61,19 +62,20 @@ class udpHandshake:
 
 
 class netManager:
+    BUFFER_SIZE = 1024
+
     TCP_PORT = 6001
     connections = {}
 
     ##
     # Constructor
     #
-    #
-    #
     def __init__(self, deviceId, isHub, numDevices=0):
 
 
         hs = udpHandshake(deviceId)
 
+        # Is this device the network hub?
         if isHub:
             devicesConnected = 0
 
@@ -91,26 +93,77 @@ class netManager:
 
         else:
 
-
             tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcpSock.bind(('', self.TCP_PORT))
-
-            hs.sendHandshake()
             tcpSock.listen(1)
+            tcpSock.settimeout(3)
 
+            inbound = None
+            while inbound is None:
 
-            self.connections["hub"] = tcpSock
+                hs.sendHandshake()
+                # print "Listening"
+                try:
+                    inbound = tcpSock.accept()
+                    print inbound
+                except socket.error as msg:
+                    print msg
+                    continue
+
+            self.connections["hub"] = inbound[0]
+            tcpSock.close()
 
         hs.close()
         return
 
+    ##
+    # send
+    #
+    # Description: sends a message to a device
+    #
+    # Parameters:
+    #   msg - the message to send
+    #   deviceId - the device to send the message
+    #
+    def send(self, msg, deviceId):
+        self.connections[deviceId].send(msg)
 
+    ##
+    # sendAll
+    #
+    # Description: sends a message to all devices
+    #
+    # Parameters:
+    #   msg - the message to send
+    def sendAll(self, msg):
+        for device in self.connections:
+            self.connections[device].send(msg)
+
+    ##
+    # recv
+    #
+    # Description: attempt to receive a message from each device, if their
+    #   are no inbound messages then returns None
+    #
+    def recv(self):
+        for device in self.connections:
+            conn = self.connections[device]
+            try:
+                recv = conn.recv(self.BUFFER_SIZE)
+                return recv
+            except socket.error:
+                continue
+
+        return None
+
+    ##
+    # close
+    #
+    # Description: close all streams
+    #
     def close(self):
-        return
+        for device in self.connections:
+            self.connections[device].close()
 
-#If the message type slot is 0 then stop
-MESSAGE_TYPE_ESTOP = 0
-MESSAGE_TYPE_HEARTBEAT = 1
-MESSAGE_TYPE_SET_MODE = 2
-MESSAGE_TYPE_MANUAL_COMMAND = 3
+
 

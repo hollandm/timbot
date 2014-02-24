@@ -4,5 +4,5 @@ import netProtocol
 # a.sendHandshake()
 
 b = netProtocol.netManager("Server", True, 1)
-print b.connections["Client"].recv(1024)
-
+# print b.connections["Client"].recv(1024)
+print b.recv()
