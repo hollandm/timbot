@@ -6,3 +6,4 @@ import netProtocol
 # print a.receiveHandshake()
 
 b = netProtocol.netManager("Client", False)
+b.connections["hub"].send('test')

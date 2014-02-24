@@ -61,6 +61,8 @@ class udpHandshake:
 
 
 class netManager:
+    TCP_PORT = 6001
+    connections = {}
 
     ##
     # Constructor
@@ -69,9 +71,6 @@ class netManager:
     #
     def __init__(self, deviceId, isHub, numDevices=0):
 
-
-        TCP_PORT = 6001
-        connections = {}
 
         hs = udpHandshake(deviceId)
 
@@ -84,9 +83,9 @@ class netManager:
                 tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 print addr
 
-                tcpSock.connect((addr, TCP_PORT))
+                tcpSock.connect((addr, self.TCP_PORT))
 
-                connections[deviceId] = tcpSock
+                self.connections[deviceId] = tcpSock
 
                 devicesConnected += 1
 
@@ -94,13 +93,13 @@ class netManager:
 
 
             tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            tcpSock.bind(('', TCP_PORT))
+            tcpSock.bind(('', self.TCP_PORT))
 
             hs.sendHandshake()
             tcpSock.listen(1)
 
 
-            connections["hub"] = tcpSock
+            self.connections["hub"] = tcpSock
 
         hs.close()
         return
