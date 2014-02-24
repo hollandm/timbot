@@ -7,7 +7,7 @@ import netProtocol
 
 b = netProtocol.netManager("Client", False)
 try:
-    print b.connections
+    # print b.connections
     b.send("Hello World!", "hub")
     # b.sendAll("Hello World!")
     # for sock in b.connections:

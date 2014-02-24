@@ -83,7 +83,7 @@ class netManager:
                 deviceId, addr = hs.receiveHandshake()
 
                 tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                print addr
+                # print addr
 
                 tcpSock.connect((addr, self.TCP_PORT))
 
@@ -105,9 +105,8 @@ class netManager:
                 # print "Listening"
                 try:
                     inbound = tcpSock.accept()
-                    print inbound
+                    # print inbound
                 except socket.error as msg:
-                    print msg
                     continue
 
             self.connections["hub"] = inbound[0]
