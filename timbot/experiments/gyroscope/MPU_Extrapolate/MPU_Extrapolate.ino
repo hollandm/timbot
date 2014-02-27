@@ -48,15 +48,47 @@
 
 int deviceI2CAddress;
 
+typedef struct dataStorage{
+  int accelX;
+  int accelY;
+  int accelZ;
+
+  long velX;
+  long velY;
+  long velZ;
+
+  long posX;
+  long posY;
+  long posZ;
+
+  int gyroX;
+  int gyroY;
+  int gyroZ;
+
+  long angleX;
+  long angleY;
+  long angleZ;
+
+  int tempC;
+  int tempF;
+}
+DataSet;
+
+DataSet data;
+
 //used for a running average
-int avgX[SAMPLE_AMOUNT] = {0};
-int avgY[SAMPLE_AMOUNT] = {0};
-int avgZ[SAMPLE_AMOUNT] = {0};
-  
+int avgX[SAMPLE_AMOUNT] = {
+  0};
+int avgY[SAMPLE_AMOUNT] = {
+  0};
+int avgZ[SAMPLE_AMOUNT] = {
+  0};
+
 //used for data analysis
-int averaged[3][2] = {{0}};
-long vel[] = {0};
-long pos[] = {0};
+int averaged[3][2] = {
+  {
+    0  }
+};
 int mode = STOPPED;
 int loopCount = 0;
 
@@ -93,7 +125,7 @@ void setup(){
 //==============================================================
 void loop(){
   int error;
-  
+
   //get the sensor values, checking for errors
   int accelData[3];  //place to store values
   //get accel values
@@ -103,6 +135,10 @@ void loop(){
     Serial.println(error,DEC);
     return;
   }
+  //insert data into the struct
+  data.accelX = accelData[0];
+  data.accelY = accelData[1];
+  data.accelZ = accelData[2];
 
   int gyroData[3];
   error = getGyro((byte *)gyroData);
@@ -111,6 +147,10 @@ void loop(){
     Serial.println(error,DEC);
     return;
   }
+  //insert data into the struct
+  data.gyroX = gyroData[0];
+  data.gyroY = gyroData[1];
+  data.gyroZ = gyroData[2];
 
   int tempData[1];
   error = getTemp((byte *)tempData);
@@ -119,63 +159,76 @@ void loop(){
     Serial.println(error,DEC);
     return;
   }
-
   //convert to Celsius
-  double tempC = tempData[0]/340.0 + 36.53;
+  data.tempC = tempData[0]/340.0 + 36.53;
   //convert to Ferenheight
-  double tempF = tempC*1.8 + 32.0;
+  data.tempF = data.tempC*1.8 + 32.0;
 
-  int averagedAccel[3];
-  //take the running average
-  shiftArray(avgX,accelData[0],SAMPLE_AMOUNT);
-  averagedAccel[0] = sumArray(avgX)/SAMPLE_AMOUNT;
-  shiftArray(avgY,accelData[1],SAMPLE_AMOUNT);
-  averagedAccel[1] = sumArray(avgY)/SAMPLE_AMOUNT;
-  shiftArray(avgZ,accelData[2],SAMPLE_AMOUNT);
-  averagedAccel[2] = sumArray(avgZ)/SAMPLE_AMOUNT;
-  
   /*
-  //put accel data into the averaged array
-  shiftArray(averaged[2],averagedAccel[2],2);
-  if (analyze(averaged)!= UNCHANGED){
-    mode = analyze(averaged);
+  //this commented stuff is for acceleration analysis
+   int averagedAccel[3];
+   //take the running average
+   shiftArray(avgX,accelData[0],SAMPLE_AMOUNT);
+   averagedAccel[0] = sumArray(avgX)/SAMPLE_AMOUNT;
+   shiftArray(avgY,accelData[1],SAMPLE_AMOUNT);
+   averagedAccel[1] = sumArray(avgY)/SAMPLE_AMOUNT;
+   shiftArray(avgZ,accelData[2],SAMPLE_AMOUNT);
+   averagedAccel[2] = sumArray(avgZ)/SAMPLE_AMOUNT;
+   
+   //put accel data into the averaged array
+   shiftArray(averaged[2],averagedAccel[2],2);
+   if (analyzeAccel(averaged)!= UNCHANGED){
+   mode = analyzeAccel(averaged);
+   }
+   if (mode == STARTING){
+   velZ += averaged[0];
+   }
+   if (mode == STOPPED){
+   velZ = 0;
+   }
+   //assume it is opposite (still adding them)
+   if (mode == STOPPING){
+   velZ += averaged[0];
+   }
+   
+   pos[0] += vel[0];
+   pos[1] += vel[1];
+   pos[2] += vel[2];
+   
+   
+   if(loopCount < 500){
+   Serial.print(averagedAccel[2]);
+   Serial.print("\t");
+   Serial.print(vel[2]);
+   Serial.print("\t");
+   Serial.print(pos[2]);
+   Serial.println();
+   }
+   
+   Serial.print(averagedAccel[0]);
+   Serial.print("\t");
+   Serial.print(averagedAccel[1]);
+   Serial.print("\t");
+   Serial.print(averagedAccel[2]);
+   Serial.print("\t");
+   Serial.println(sumArray(averagedAccel));
+   */
+  if (abs(data.gyroX) > 100){
+    data.angleX += data.gyroX;
   }
-  if (mode == STARTING){
-    velZ += averaged[0];
-  }
-  if (mode == STOPPED){
-    velZ = 0;
-  }
-  //assume it is opposite (still adding them)
-  if (mode == STOPPING){
-    velZ += averaged[0];
-  }
-  
-  pos[0] += vel[0];
-  pos[1] += vel[1];
-  pos[2] += vel[2];
-  
+  data.angleY += data.gyroY;
+  data.angleZ += data.gyroZ;
 
-  if(loopCount < 500){
-    Serial.print(averagedAccel[2]);
-    Serial.print("\t");
-    Serial.print(vel[2]);
-    Serial.print("\t");
-    Serial.print(pos[2]);
-    Serial.println();
-  }
-  */
-  Serial.print(averagedAccel[0]);
+
+  Serial.print(data.gyroX);
   Serial.print("\t");
-  Serial.print(averagedAccel[1]);
-  Serial.print("\t");
-  Serial.print(averagedAccel[2]);
-  Serial.print("\t");
-  Serial.println(sumArray(averagedAccel));
+  Serial.print(data.angleX);
+  Serial.println();
   delay(50);
 
   loopCount++;
 }
+
 
 
 
