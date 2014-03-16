@@ -72,9 +72,7 @@ class netManager:
     #
     def __init__(self, deviceId, isHub, numDevices=0):
 
-
         hs = udpHandshake(deviceId)
-
         # Is this device the network hub?
         if isHub:
             devicesConnected = 0
@@ -93,7 +91,6 @@ class netManager:
                 devicesConnected += 1
 
         else:
-
             tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcpSock.bind(('', self.TCP_PORT))
             tcpSock.listen(1)
@@ -147,6 +144,7 @@ class netManager:
     #
     def recv(self):
         for device in self.connections:
+            print "checking device " + device
             conn = self.connections[device]
             try:
                 recv = conn.recv(self.BUFFER_SIZE)
