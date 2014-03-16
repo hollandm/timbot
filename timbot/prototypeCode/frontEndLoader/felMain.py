@@ -8,6 +8,7 @@ try:
     print "Successfully Imported Network"
     sys.path.insert(0, "../general")
     from device import device
+    from log import logger
     print "Successfully Imported Device"
 except ImportError:
     print "Could not import components, terminating program"
@@ -35,6 +36,7 @@ while True:
 
     inboundData = myDevice.client.getData()
 
+    # Did we get a message?
     if inboundData is not None:
 
         # TODO: check if the message is telling us to E-Stop
@@ -50,7 +52,6 @@ while True:
     if myDevice.deviceMode == myDevice.MODE_MANUAL:
         # TODO: if no manual control command has been issued recently then stop
         continue
-
 
     if myDevice.deviceMode == myDevice.MODE_AUTONOMOUS:
         # TODO: preform autonomous operations

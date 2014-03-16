@@ -6,14 +6,16 @@ import networkReciever
 import time
 import autonomyDemo
 
-# Network socket for recieving commands
+print "E-Week Demo: Started"
+
+# Network socket for relieving commands
 net = networkReciever.networkReciever()
 net.openClientSocket()
 
 # Open a serial connection to the motors
 con = motorCommands.motorController('/dev/ttyUSB0')
 
-# Open a serial connection to the arduino for autonpmous testing
+# Open a serial connection to the arduino for autonomous testing
 aiController = autonomyDemo.autoDriveUntil('/dev/ttyACM0', con)
 
 # Some number that makes the motors go faster
@@ -24,7 +26,7 @@ while True:
 
     command = net.getData()
 
-    # If we recieved a packet then look at it
+    # If we relieved a packet then look at it
     if command is not None:
 
         # Did we get a Reset Motors/E-Stop Command?

@@ -20,6 +20,11 @@ class device:
     DEVICE_ID_CONSOLE = 1    # Data is meant for the command console
     DEVICE_ID_FEL = 2       # Data is meant for the Front End Loader (old robot)
 
+    DEVICE_NAMES = []
+    DEVICE_NAMES.insert(DEVICE_ID_ALL, "Robots")
+    DEVICE_NAMES.insert(DEVICE_ID_FEL, "FEL")
+
+
     def __init__(self, deviceId):
         # Initialize the robot in standbye mode
         self.deviceMode = self.MODE_STANDBYE
