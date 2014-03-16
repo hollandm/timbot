@@ -1,0 +1,34 @@
+Here instructions on how to setup the robot.
+
+Router:
+0. Plug in the router
+
+Robot:
+1. Plug the smart motors and bucket arduino into the bot top
+2. Log into the bot top, the password is timbot2
+3. Connect the bot top to the network (Click bars icon in bottom right corner of screen). Our network is called UP_Robotics.
+4. Open terminal, start->System Tools->xterm
+5. For engineering week I have placed a script that will do most of the work for you. You just have to start the script, in terminal type 
+	sudo ./setup.sh
+6. Terminal should read "E-Week Demo Started"
+8. Close the computer, and the case. Twist the E-stop button to power the robot.
+
+Control Program:
+9. Switch to the old grey laptop. It doesn't have a password, just hit enter when it asks you for one.
+10. The battery dies in about 20 seconds so plug it in.
+11. Plug the joysticks into the computer.
+12. Connect the computer to the network "UP Robotics"
+13. Click on joysticks.py on the Desktop
+14. On the joystick that you intend to control the right wheels with hit the 5 button so the software knows which joystick is which.
+
+Everything should now be set up
+
+Here are the controls.
+
+Pushing the Left joystick forwards and backwards should drive the left wheels forward or backwards.
+Pushing the Right joystick forwards and backwards should drive the right wheels forward or backwards.
+Tapping the trigger on the right joystick should have the robot drive forward until the IR sensors detect that they are about to hit something.
+When the robot is in it's autonomous drive forward mode button 4 on the right joystick should act as a stop button.
+Button 4 on the right joystick  also resets the motors.
+
+When you pack up you don't have to be too careful. Unpluging things is not the most graceful way to turn it off but it works. Just make sure you turn off power on the robot by pushing the E-Stop button.

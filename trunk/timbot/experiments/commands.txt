@@ -1,0 +1,2 @@
+ssh uprobotics@192.168.1.102
+sudo scp serialTest.py uprobotics@192.168.1.102:/home/uprobotics/Desktop/serialTest.py
