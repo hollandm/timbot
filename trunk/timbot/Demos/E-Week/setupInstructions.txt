@@ -37,3 +37,4 @@ When the robot is in it's autonomous drive forward mode button 4 on the right jo
 Button 4 on the right joystick  also resets the motors.
 
 
+When you pack up you don't have to be too careful. Unpluging things is not the most graceful way to turn it off but it works. Just make sure you turn off power on the robot by pushing the E-Stop button.

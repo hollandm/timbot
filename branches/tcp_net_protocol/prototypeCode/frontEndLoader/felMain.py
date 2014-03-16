@@ -1,8 +1,6 @@
 import sys
 try:
     sys.path.insert(0, "../networkProtocol")
-    import client
-    import server
     import netProtocol
     import heartBeatMonitor
     print "Successfully Imported Network"
@@ -21,8 +19,7 @@ except ImportError:
 myDevice = device(device.DEVICE_ID_FEL)
 
 # Setup Network Components
-myDevice.client = client.client(myDevice)
-myDevice.server = server.server()
+myDevice.netManager = netProtocol.networkManager(device.DEVICE_ID_FEL, False)
 myDevice.heartbeatMonitor = heartBeatMonitor.heartBeatMonitor(myDevice)
 
 # Setup Hardware Components

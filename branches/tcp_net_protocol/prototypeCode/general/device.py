@@ -32,8 +32,7 @@ class device:
         self.deviceId = deviceId
 
 
-        self.server = None
-        self.client = None
+        self.netManager = None
 
 
         return
