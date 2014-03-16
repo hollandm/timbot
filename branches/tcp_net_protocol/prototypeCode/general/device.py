@@ -10,7 +10,7 @@ class device:
     MODE_STANDBYE = 0
 
     # While under manual control, the device receives movement commands via a network connection
-    MODE_MANUAL_CONTROL = 1
+    MODE_MANUAL = 1
 
     # While in autonomous mode the device will make decisions about what movements it should make
     MODE_AUTONOMOUS = 2

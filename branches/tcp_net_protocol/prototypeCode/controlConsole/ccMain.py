@@ -48,6 +48,8 @@ while True:
                 #
                 print ""
 
+        netManager.sendAll(command)
+
         if args[0] == "stop":
             # TODO: Tell the selected robot to stop
             print ""
