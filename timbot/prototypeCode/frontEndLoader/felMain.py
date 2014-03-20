@@ -1,6 +1,9 @@
+from distutils.command.install import install
+
 print "System Initializing"
 
 import sys
+from felAutonamousStateMachine import felAutonamousStateMachine
 try:
     sys.path.insert(0, "../networkProtocol")
     import netProtocol
@@ -32,20 +35,42 @@ print "connection established"
 
 # TODO: Start off another thread(s) to gather/record sensor data
 
+
+# setup the autonomous state machine
+brain = felAutonamousStateMachine()
+
 # Enter Main Loop
 while True:
 
-    # inboundData = myDevice.client.getData()
-    # print "attempting to get data"
     inboundData = myDevice.netManager.recv()
-
 
     # Did we get a message?
     if inboundData is not None:
         print "Received Command: " + inboundData
 
-        if inboundData == "quit":
+        arguments = inboundData.split(" ")
+
+        if arguments[0] == "quit":
             break
+
+        if arguments[0] == "set":
+            if len(arguments) > 2:
+                if arguments[1] == "state":
+                    if len(arguments) != 3:
+                        # TODO: notify remote command console
+                        print "Invalid command"
+                    else:
+                        try:
+                            newState = int(arguments[2])
+                            felAutonamousStateMachine.state = newState
+                            print "Setting autonomous state to " + str(newState)
+                        except ValueError:
+                            print "Invalid state"
+
+        # if arguments[0] == "get":
+        #     if len(arguments) == 2:
+        #         if arguments[1] == "state":
+        #             myDevice.netManager.send(str(brain.getState()), "hub")
 
         # TODO: check if the message is telling us to E-Stop
         # TODO: check if the message is telling us to switch mode
@@ -62,7 +87,8 @@ while True:
         continue
 
     if myDevice.deviceMode == myDevice.MODE_AUTONOMOUS:
-        # TODO: preform autonomous operations
+        # preform autonomous operations
+        brain.step()
         continue
 
     continue
