@@ -43,16 +43,15 @@ while True:
             # TODO: Select a robot
             print args[1]
 
-        if args[0] == "drive":
-            if args[1] == "forward":
-                #
-                print ""
-
+        print "presanity check"
         netManager.sendAll(command)
 
-        if args[0] == "stop":
-            # TODO: Tell the selected robot to stop
-            print ""
+        print "sanity check"
+        # if args[0] == "get":
+        #     if len(args) == 2:
+        #         if args[1] == "state":
+        #             newState = netManager.recv()
+        #             print "Autonomous state: " + str(newState)
 
     except IndexError:
         print "Invalid Command Entered"

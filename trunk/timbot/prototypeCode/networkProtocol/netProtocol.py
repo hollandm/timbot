@@ -1,6 +1,5 @@
 import socket
 import struct
-import time
 
 
 class udpHandshake:
@@ -70,6 +69,12 @@ class netManager:
     ##
     # Constructor
     #
+    # Description:
+    #
+    # Parameters:
+    #   deviceId - the id of the device
+    #   isHub - weather or not this the hub that accepts connections from everyone else
+    #   numDevices - if we are the hub then how many devices should we expect to connect.
     def __init__(self, deviceId, isHub, numDevices=0):
 
         hs = udpHandshake(deviceId)
@@ -81,9 +86,6 @@ class netManager:
                 deviceId, addr = hs.receiveHandshake()
 
                 tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                # print addr
-
-                # time.sleep(1)
 
                 tcpSock.connect((addr, self.TCP_PORT))
                 self.connections[deviceId] = tcpSock
