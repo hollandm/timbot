@@ -6,11 +6,11 @@ class device:
     ## Constants
     ##
 
-    # In the standbye mode the device will ignore all manual or autonomous movement commands.
-    MODE_STANDBYE = 0
+    # In the standby mode the device will ignore all manual or autonomous movement commands.
+    MODE_STANDBY = 0
 
     # While under manual control, the device receives movement commands via a network connection
-    MODE_MANUAL_CONTROL = 1
+    MODE_MANUAL = 1
 
     # While in autonomous mode the device will make decisions about what movements it should make
     MODE_AUTONOMOUS = 2
@@ -26,15 +26,12 @@ class device:
 
 
     def __init__(self, deviceId):
-        # Initialize the robot in standbye mode
-        self.deviceMode = self.MODE_STANDBYE
+        # Initialize the robot in standby mode
+        self.deviceMode = self.MODE_STANDBY
 
         self.deviceId = deviceId
 
-
-        self.server = None
-        self.client = None
-
+        self.netManager = None
 
         return
 

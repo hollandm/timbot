@@ -1,8 +1,6 @@
 import sys, re
 try:
     sys.path.insert(0, "../networkProtocol")
-    import client
-    import server
     import netProtocol
     # import heartBeatMonitor
     print "Successfully Imported Network"
@@ -19,6 +17,11 @@ destinationDevice = device.DEVICE_ID_ALL
 promptMessage = device.DEVICE_NAMES[destinationDevice]
 
 
+
+# Setup Network Components
+print "attempting to open a connection"
+netManager = netProtocol.netManager("CC", True, 1)
+
 print "Starting Robotics Command Console"
 
 while True:
@@ -31,6 +34,8 @@ while True:
         args = command.split(" ")
 
         if args[0] == "quit":
+            netManager.sendAll("stop")
+            netManager.sendAll("quit")
             break
 
         # Select a robot to send commands to
@@ -42,6 +47,8 @@ while True:
             if args[1] == "forward":
                 #
                 print ""
+
+        netManager.sendAll(command)
 
         if args[0] == "stop":
             # TODO: Tell the selected robot to stop
