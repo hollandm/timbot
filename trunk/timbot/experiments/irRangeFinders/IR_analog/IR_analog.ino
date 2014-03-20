@@ -1,6 +1,6 @@
 /*
 * This program averages a number of samples together, designed to
- * read from an IR sensor.
+ * read from several IR sensors.
  */
 
 #define SAMPLE_AMOUNT 250
@@ -38,7 +38,7 @@ void setup() {
 
 void loop() {
   struct dataStore data;
-  data.sum0 =0;
+  data.sum0 = 0;
   data.sum1 = 0;
   data.sum2 = 0;
   data.sum3 = 0;
