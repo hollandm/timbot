@@ -107,6 +107,7 @@ class netManager:
                 except socket.error as msg:
                     continue
 
+            inbound[0].setblocking(0)
             self.connections["hub"] = inbound[0]
             tcpSock.close()
 
@@ -144,7 +145,7 @@ class netManager:
     #
     def recv(self):
         for device in self.connections:
-            print "checking device " + device
+            # print "checking device " + device
             conn = self.connections[device]
             try:
                 recv = conn.recv(self.BUFFER_SIZE)

@@ -1,10 +1,10 @@
+print "System Initializing"
+
 import sys
 try:
     sys.path.insert(0, "../networkProtocol")
-    import client
-    import server
     import netProtocol
-    import heartBeatMonitor
+    # import heartBeatMonitor
     print "Successfully Imported Network"
     sys.path.insert(0, "../general")
     from device import device
@@ -21,9 +21,10 @@ except ImportError:
 myDevice = device(device.DEVICE_ID_FEL)
 
 # Setup Network Components
-myDevice.client = client.client(myDevice)
-myDevice.server = server.server()
-myDevice.heartbeatMonitor = heartBeatMonitor.heartBeatMonitor(myDevice)
+print "attempting to open a connection"
+myDevice.netManager = netProtocol.netManager("FEL", False)
+# myDevice.heartbeatMonitor = heartBeatMonitor.heartBeatMonitor(myDevice)
+print "connection established"
 
 # Setup Hardware Components
 # TODO: Write this when I have access to the robot
@@ -34,10 +35,17 @@ myDevice.heartbeatMonitor = heartBeatMonitor.heartBeatMonitor(myDevice)
 # Enter Main Loop
 while True:
 
-    inboundData = myDevice.client.getData()
+    # inboundData = myDevice.client.getData()
+    # print "attempting to get data"
+    inboundData = myDevice.netManager.recv()
+
 
     # Did we get a message?
     if inboundData is not None:
+        print "Received Command: " + inboundData
+
+        if inboundData == "quit":
+            break
 
         # TODO: check if the message is telling us to E-Stop
         # TODO: check if the message is telling us to switch mode

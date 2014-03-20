@@ -36,13 +36,16 @@ print "connection established"
 while True:
 
     # inboundData = myDevice.client.getData()
-    print "attempting to get data"
+    # print "attempting to get data"
     inboundData = myDevice.netManager.recv()
 
 
     # Did we get a message?
     if inboundData is not None:
         print "Received Command: " + inboundData
+
+        if inboundData == "quit":
+            break
 
         # TODO: check if the message is telling us to E-Stop
         # TODO: check if the message is telling us to switch mode
