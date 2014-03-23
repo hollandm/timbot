@@ -119,14 +119,18 @@ class netManager:
     ##
     # send
     #
-    # Description: sends a message to a device
+    # Description: sends a message to a device.
+    # If deviceId is None then send to all devices
     #
     # Parameters:
     #   msg - the message to send
     #   deviceId - the device to send the message
     #
     def send(self, msg, deviceId):
-        self.connections[deviceId].send(msg)
+        if deviceId is None:
+            self.sendAll(msg)
+        else:
+            self.connections[deviceId].send(msg)
 
     ##
     # sendAll
