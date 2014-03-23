@@ -50,35 +50,45 @@ while True:
 
         arguments = inboundData.split(" ")
 
-        if arguments[0] == "quit":
-            break
+        try:
 
-        if arguments[0] == "set":
-            if len(arguments) > 2:
+            if arguments[0] == "quit":
+                break
+
+            if arguments[0] == "set":
                 if arguments[1] == "state":
-                    if len(arguments) != 3:
-                        # TODO: notify remote command console
-                        print "Invalid command"
-                    else:
-                        try:
-                            newState = int(arguments[2])
-                            felAutonamousStateMachine.state = newState
-                            print "Setting autonomous state to " + str(newState)
-                        except ValueError:
-                            print "Invalid state"
+                    try:
+                        newState = int(arguments[2])
+                        brain.state = newState
+                        print "Setting autonomous state to " + str(newState)
+                    except ValueError:
+                        print "Invalid state"
 
-        # if arguments[0] == "get":
-        #     if len(arguments) == 2:
-        #         if arguments[1] == "state":
-        #             myDevice.netManager.send(str(brain.getState()), "hub")
+                if arguments[1] == "mode":
+                    try:
+                        newMode = int(arguments[2])
+                        myDevice.deviceMode = newMode
+                        print "Setting device mode to " + str(newMode)
+                    except ValueError:
+                        print "Invalid state"
 
-        # TODO: check if the message is telling us to E-Stop
-        # TODO: check if the message is telling us to switch mode
-        # TODO: check if this is a heartbeat message
+            if arguments[0] == "get":
+                if arguments[1] == "state":
+                    myDevice.netManager.send(str(brain.getState()), "hub")
 
-        if myDevice.deviceMode == myDevice.MODE_MANUAL:
-            # TODO: if this message is manual control commands then do what they say
-            continue
+                if arguments[1] == "mode":
+                    myDevice.netManager.sendAll(str(myDevice.deviceMode))
+
+            # TODO: check if the message is telling us to E-Stop
+            # TODO: check if the message is telling us to switch mode
+            # TODO: check if this is a heartbeat message
+
+            if myDevice.deviceMode == myDevice.MODE_MANUAL:
+                # TODO: if this message is manual control commands then do what they say
+                continue
+
+        except IndexError:
+            print "Invalid Command Received"
 
     # TODO: Check that no devices have timed out from heartbeat
 
