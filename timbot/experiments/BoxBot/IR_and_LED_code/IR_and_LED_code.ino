@@ -20,30 +20,21 @@
 
 //a struct designed to hold our various points of data
 struct dataStore{
-  int D0;
-  int D1;
-  int D2;
-  int D3;
-
+  int value;
+  int run[RUN_SIZE];
   int insertIndex;
-  int run0[RUN_SIZE];
-  int run1[RUN_SIZE];
-  int run2[RUN_SIZE];
-  int run3[RUN_SIZE];
-
-  long sum0;
-  long sum1;
-  long sum2;
-  long sum3;
-
-  int avg0;
-  int avg1;
-  int avg2;
-  int avg3;
+  long sum;
+  int avg;
+  double dist;
 };
 
-struct dataStore data;
+struct dataStore front;
+struct dataStore back;
+struct dataStore right;
+struct dataStore left;
+
 int loopCount = 0;
+
 //setup: init serial, init pins.
 void setup() {
   Serial.begin(9600);
@@ -59,28 +50,52 @@ void setup() {
   pinMode(SENSOR_PIN_R, INPUT);
   pinMode(SENSOR_PIN_L, INPUT);
 
-  data.insertIndex = 0;
+  front.insertIndex = 0;
+  back.insertIndex = 0;
+  right.insertIndex = 0;
+  left.insertIndex = 0;
 }
 
 void loop() {
-  zero(data);
-  //sample(SAMPLE_SIZE);
-  running(RUN_SIZE);
+  zero(&front);
+  zero(&back);
+  zero(&right);
+  zero(&left);
+  
+  //sample(front, SAMPLE_SIZE, SENSOR_PIN_F);
+  running(&front, RUN_SIZE, SENSOR_PIN_F);
+  running(&back, RUN_SIZE, SENSOR_PIN_B);
+  running(&right, RUN_SIZE, SENSOR_PIN_R);
+  running(&left, RUN_SIZE, SENSOR_PIN_L);
+  
+  convertToDist(&front);
+  convertToDist(&back);
+  convertToDist(&right);
+  convertToDist(&left);
 
   if (loopCount %100 == 0) {
     //print the data
-    Serial.print(data.avg0);
+    Serial.print("Front val dist(cm):\t");
+    Serial.print(front.avg);
     Serial.print("\t");
-    Serial.print(data.avg1);
+    Serial.print(front.dist);
+    Serial.print("\tBack:\t");
+    Serial.print(back.avg);
     Serial.print("\t");
-    Serial.print(data.avg2);
+    Serial.print(back.dist);
+    Serial.print("\tRight:\t");
+    Serial.print(right.avg);
     Serial.print("\t");
-    Serial.print(data.avg3);
+    Serial.print(right.dist);
+    Serial.print("\tLeft\t");
+    Serial.print(left.avg);
+    Serial.print("\t");
+    Serial.print(left.dist);
     Serial.println();
   }
 
   //directional LEDS
-  if (data.avg0 < data.avg1) {
+  if (front.avg < back.avg) {
     digitalWrite(LED_F, HIGH);
     digitalWrite(LED_B, LOW);
   }
@@ -89,7 +104,7 @@ void loop() {
     digitalWrite(LED_F, LOW);
   }
 
-  if (data.avg2 < data.avg3) {
+  if (right.avg < left.avg) {
     digitalWrite(LED_R, HIGH);
     digitalWrite(LED_L, LOW);
   }
@@ -99,7 +114,7 @@ void loop() {
   }
 
   //center check
-  if (centered(data)) {
+  if (centered() == 1) {
     digitalWrite(LED_C, HIGH);
   }
   else{
