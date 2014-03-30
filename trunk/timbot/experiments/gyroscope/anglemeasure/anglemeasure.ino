@@ -34,14 +34,16 @@
 #define MPU1_AD0_PIN 2
 #define MPU2_AD0_PIN 3
 
+#define SQ(x) (x)*(x)
+
 typedef struct dataStorage{
   int accelX;
   int accelY;
   int accelZ;
 
-  long velX;
-  long velY;
-  long velZ;
+  int zeroX;
+  int zeroY;
+  int zeroZ;
 
   long posX;
   long posY;
@@ -50,6 +52,7 @@ typedef struct dataStorage{
   int gyroX;
   int gyroY;
   int gyroZ;
+  int gyroZprev;
 
   long angleX;
   long angleY;
@@ -62,6 +65,7 @@ DataSet;
 
 DataSet ref;
 DataSet arm;
+int loopCount;
 
 void setup(){
   Wire.begin();  //set up I2C bus
@@ -87,25 +91,53 @@ void setup(){
   MPUWrite(REFERENCE_MPU, SLEEP, &clr);
   MPUWrite(ARM_MPU, SLEEP, &clr);
   Serial.println(" done!\n");
-  Serial.println();
-
+  Serial.println("Calibrating, do not move the sensors.");
+  Serial.print("Calibrating in 3");
+  delay(1000);
+  Serial.print(" 2");
+  delay(1000);
+  Serial.println(" 1");
+  delay(1000);
+  getZeroValues(&ref, REFERENCE_MPU);
+  getZeroValues(&arm, ARM_MPU);
 }
 
 void loop(){
-  
+
   int accelData[3];
   getAccel(REFERENCE_MPU, (byte *)accelData);
   ref.accelX = accelData[0];
   ref.accelY = accelData[1];
-  
+
   getAccel(ARM_MPU, (byte *)accelData);
   arm.accelX = accelData[0];
   arm.accelY = accelData[1];
-  
-  double angle = atan2(arm.accelY,arm.accelX)-atan2(ref.accelY,ref.accelX);
-  
-  Serial.print("Angle measurement:\t");
-  Serial.println(angle, DEC);
-  delay(50);
+
+  int gyroData[3];
+  getGyro(ARM_MPU, (byte *)gyroData);
+  arm.gyroZprev = arm.gyroZ;
+  arm.gyroZ = gyroData[2]; //rotational velocity in x-y plane
+
+  //float trueArmY = arm.accelY - SQ(arm.gyroZ)*ARM_RADIUS;
+
+  double angle = atan2(arm.accelY,arm.accelX-arm.zeroX)
+    -atan2(ref.accelY,ref.accelX-ref.zeroX);
+
+  if(loopCount % 100 == 0){
+    Serial.print("Angle measurement:\t");
+    Serial.println(angle*360/(2*PI), DEC);
+  }
+  loopCount++;
 }
+
+
+int getZeroValues(struct dataStorage * dataPtr, byte addr){
+  int accelData[3];
+  getAccel(addr, (byte *)accelData);
+  (*dataPtr).zeroX = accelData[0];
+  (*dataPtr).zeroY = accelData[1];
+  (*dataPtr).zeroZ = accelData[2];
+  return 0;
+}
+
 
