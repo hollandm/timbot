@@ -11,7 +11,7 @@ Basic Terminology:
 = Details =
 
   # Download and Install TortoiseSVN from [http://tortoisesvn.net/]
-  # Once TortoiseSVN is installed, right click in the directory where you want to check out the repository, and click SVN Checkout
-  # Enter the url https://timbot.googlecode.com/svn/trunk/ in the “URL of repository field”, and hit OK.
+  # Once TortoiseSVN is installed, right click in the directory where you want to check out the repository, and click SVN Checkout https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN1.png
+  # Enter the url https://timbot.googlecode.com/svn/trunk/ in the “URL of repository field”, and hit OK. https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN2.png
   # TortoiseSVN will then download all the files in the repository, and create a folder on your desktop named “timbot”. This folder is where you will put all of your files.
   # Let’s say I want to add a new file. Once created, you’ll note that is doesn’t have the green check mark by it, indicated it is not being tracked, or watched by TortoiseSVN. To add it to the tracked list, and therefore add it to the repository, you need to right click on the file, and select “TortoiseSVN->Add”. 
