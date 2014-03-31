@@ -18,6 +18,7 @@ Basic Terminology:
   # TortoiseSVN will then download all the files in the repository, and create a folder on your desktop named “timbot”. This folder is where you will put all of your files.   
     https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN3.png
     https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN4.png
+  # To update this, all I have to do is right click the directory, and select SVN update. TortoiseSVN will take care of the rest. 
   # Let’s say I want to add a new file. Once created, you’ll note that is doesn’t have the green check mark by it, indicated it is not being tracked, or watched by TortoiseSVN. To add it to the tracked list, and therefore add it to the repository, you need to right click on the file, and select “TortoiseSVN->Add”. 
     https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN5.png
     https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN6.png
@@ -26,3 +27,5 @@ Basic Terminology:
      https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN8.png
      https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN9.png
      https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN10.png
+
+That's all you need for a basic intro. And *Make sure you update before you start working*. 
