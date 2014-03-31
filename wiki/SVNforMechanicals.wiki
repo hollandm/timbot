@@ -23,7 +23,7 @@ Basic Terminology:
     https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN5.png
     https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN6.png
     https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN7.png
-  # Now, this has just added the file locally. We now need to _commit_ it, so that others can see it and download it. Right click once again in the directory, and then click "SVN Commit". This starts the commit process. You will receive a prompt, telling you what you changed, and giving you the option to add a comment on the change. *Make sure to add a comment to every commit, and make the comment very descriptive of what you've done.* On the first try, you will receive a login prompt. This requires your username, and a password you can get from [https://code.google.com/hosting/settings]. 
+  # Now, this has just added the file locally. We now need to _commit_ it, so that others can see it and download it. Right click once again in the directory, and then click "SVN Commit". This starts the commit process. You will receive a prompt, telling you what you changed, and giving you the option to add a comment on the change. *Make sure to add a comment to every commit, and make the comment very descriptive of what you've done.* On the first try, you will receive a login prompt. This requires your email (the personal gmail one), and a password you can get from [https://code.google.com/hosting/settings]. 
      https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN8.png
      https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN9.png
      https://timbot.googlecode.com/svn/wiki/SVNIntro/SVN10.png
