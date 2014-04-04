@@ -1,4 +1,3 @@
-__author__ = 'matt'
 
 # TODO: make an arduino interface
 # We want this because it is likely that we will have a number of sensors going through a single arduino.

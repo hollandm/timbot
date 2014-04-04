@@ -1,4 +1,5 @@
-import sys, re
+import sys
+
 try:
     sys.path.insert(0, "../networkProtocol")
     import netProtocol
@@ -17,7 +18,6 @@ destinationDevice = device.DEVICE_ID_ALL
 promptMessage = device.DEVICE_NAMES[destinationDevice]
 
 
-
 # Setup Network Components
 print "attempting to open a connection"
 netManager = netProtocol.netManager("CC", True, 1)
@@ -29,11 +29,6 @@ print "Starting Robotics Command Console"
 while True:
 
     try:
-
-        if selectedDevice is not None:
-            promptMessage = selectedDevice
-        else:
-            promptMessage = "Robots"
 
         command = raw_input(promptMessage+"$ ")
         command = command.strip().lower()
@@ -47,10 +42,12 @@ while True:
 
         # Select a robot to send commands to
         if args[0] == "select":
-            if args[1] in netManager.connections:
-                selectedDevice = args[1]
+            if args[1].upper() in netManager.connections:
+                selectedDevice = args[1].upper()
+                promptMessage = selectedDevice
             else:
                 selectedDevice = None
+                promptMessage = "Robots"
             continue
 
         if args[0] == "set":
@@ -75,7 +72,6 @@ while True:
 
             if args[1] == "mode":
                 newMode = netManager.recv()
-                # print "received: " + newMode
                 if newMode == device.MODE_MANUAL:
                     print "Device Mode: Manual"
                 elif newMode == device.MODE_AUTONOMOUS:

@@ -3,7 +3,7 @@ from distutils.command.install import install
 print "System Initializing"
 
 import sys
-from felAutonamousStateMachine import felAutonamousStateMachine
+from felAutonomousStateMachine import felAutonamousStateMachine
 try:
     sys.path.insert(0, "../networkProtocol")
     import netProtocol
@@ -26,11 +26,11 @@ myDevice = device(device.DEVICE_ID_FEL)
 # Setup Network Components
 print "attempting to open a connection"
 myDevice.netManager = netProtocol.netManager("FEL", False)
-# myDevice.heartbeatMonitor = heartBeatMonitor.heartBeatMonitor(myDevice)
 print "connection established"
 
 # Setup Hardware Components
-# TODO: Write this when I have access to the robot
+# TODO: Open lines of communication with smart motors
+# TODO: Open lines of communication with arduino
 
 
 # TODO: Start off another thread(s) to gather/record sensor data
@@ -42,6 +42,7 @@ brain = felAutonamousStateMachine()
 # Enter Main Loop
 while True:
 
+    # attempt to get a message from the command console via network
     inboundData = myDevice.netManager.recv()
 
     # Did we get a message?
@@ -52,9 +53,11 @@ while True:
 
         try:
 
+            # Stop executing the for ever loop, quit out of program
             if arguments[0] == "quit":
                 break
 
+            # Set some value on the robot
             if arguments[0] == "set":
                 if arguments[1] == "state":
                     try:
@@ -72,16 +75,13 @@ while True:
                     except ValueError:
                         print "Invalid state"
 
+            # Return some value over the network
             if arguments[0] == "get":
                 if arguments[1] == "state":
                     myDevice.netManager.send(str(brain.getState()), "hub")
 
                 if arguments[1] == "mode":
                     myDevice.netManager.sendAll(str(myDevice.deviceMode))
-
-            # TODO: check if the message is telling us to E-Stop
-            # TODO: check if the message is telling us to switch mode
-            # TODO: check if this is a heartbeat message
 
             if myDevice.deviceMode == myDevice.MODE_MANUAL:
                 # TODO: if this message is manual control commands then do what they say
@@ -94,6 +94,7 @@ while True:
 
     if myDevice.deviceMode == myDevice.MODE_MANUAL:
         # TODO: if no manual control command has been issued recently then stop
+        # Fun story, I've had to chase after a robot who didn't stop driving after losing network connection before
         continue
 
     if myDevice.deviceMode == myDevice.MODE_AUTONOMOUS:
@@ -102,3 +103,5 @@ while True:
         continue
 
     continue
+
+# TODO: Once we have exited the loop cleanup all resources that we have opened/started
