@@ -78,7 +78,7 @@ class device:
         # TODO: determine how to id actuators, add constants for each actuator
         # TODO: determine how to indicate if a actuator or a "fake" should be returned
 
-        return self._sensors[actuatorId]
+        return self._actuators[actuatorId]
 
     ##
     # addSensor
