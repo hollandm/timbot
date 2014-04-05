@@ -147,7 +147,7 @@ con.driveRight(-1000)
 time.sleep(5)
 
 con.stopLeft()
-con.stopLeft()
+con.stopRight()
 con.close()
 
 

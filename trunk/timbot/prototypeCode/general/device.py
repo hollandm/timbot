@@ -65,7 +65,7 @@ class device:
     ##
     # getActuator
     #
-    # Description: gets a actuator from list of opened actuators, has the ability to provide a "fake" simulation
+    # Description: gets an actuator from list of opened actuators, has the ability to provide a "fake" simulation
     #       actuators instead of the real thing if we tell it to
     #
     # Parameters:
@@ -79,3 +79,27 @@ class device:
         # TODO: determine how to indicate if a actuator or a "fake" should be returned
 
         return self._sensors[actuatorId]
+
+    ##
+    # addSensor
+    #
+    # Description: adds a sensor to the list of opened sensors
+    #
+    # Parameters:
+    #   sensorId - unique identifier of the actuators
+    #   obj - the actuator controller object to add
+    #
+    def addSensor(self, sensorId, obj):
+        self._sensors[sensorId] = obj
+
+    ##
+    # addActuator
+    #
+    # Description: adds an actuator to the list of opened actuators
+    #
+    # Parameters:
+    #   actuatorId - unique identifier of the actuators
+    #   obj - the actuator controller object to add
+    #
+    def addActuator(self, actuatorId, obj):
+        self._actuators[actuatorId] = obj
