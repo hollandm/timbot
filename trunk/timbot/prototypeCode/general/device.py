@@ -103,3 +103,7 @@ class device:
     #
     def addActuator(self, actuatorId, obj):
         self._actuators[actuatorId] = obj
+
+
+# test = {}
+# test["motors"] = 1
