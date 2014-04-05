@@ -65,6 +65,8 @@ class motorController:
         self.write("VT=" + str(velocity) + " ")
         self.write("G ")
 
+        print "driving left"
+
     ##
     # driveRight
     #
@@ -81,6 +83,7 @@ class motorController:
         self.write("VT=" + str(velocity) + " ")
         self.write("G ")
 
+        print "driving right"
 
     ##
     # stopLeft
