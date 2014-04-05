@@ -40,7 +40,7 @@ myDevice.addActuator("motors", motors)
 
 # setup the autonomous state machine
 auto = felAutonomousStateMachine()
-manual = felManualCommandInterpreter()
+manual = felManualCommandInterpreter(myDevice)
 
 # Enter Main Loop
 while True:
