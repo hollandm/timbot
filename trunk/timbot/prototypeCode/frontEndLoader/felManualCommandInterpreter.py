@@ -40,6 +40,7 @@ class felManualCommandInterpreter:
         split = command.split(" ")
 
         try:
+            print split
             if split[0] == "drive":
                 velocity = split[1]
                 seconds = split[2]
@@ -55,7 +56,7 @@ class felManualCommandInterpreter:
                 print "rotating"
                 return
 
-        except:
+        except IndexError:
             print "Exception"
 
         # TODO: if not a valid command don't do anything
