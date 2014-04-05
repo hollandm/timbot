@@ -30,10 +30,10 @@ class device:
 
     def __init__(self, deviceId):
         # List of sensor components opened by this program
-        self._sensors = []
+        self._sensors = {}
 
         # List of actuators opened by this program
-        self._actuators = []
+        self._actuators = {}
 
         # Initialize the robot in standby mode
         self.deviceMode = self.MODE_STANDBY
