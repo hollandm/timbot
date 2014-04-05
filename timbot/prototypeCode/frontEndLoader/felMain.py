@@ -13,7 +13,8 @@ try:
     from log import logger
     print "Successfully Imported Device"
     sys.path.insert(0, "../hardwareInterfaces")
-    from animaticsMotors import animaticsMotors
+    from animaticsMotors import motorController
+    print "Successfully Imported "
 except ImportError:
     print "Could not import components, terminating program"
     sys.exit()
