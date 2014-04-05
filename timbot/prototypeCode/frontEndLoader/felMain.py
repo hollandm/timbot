@@ -31,7 +31,7 @@ myDevice.netManager = netProtocol.netManager("FEL", False)
 print "connection established"
 
 # Setup Hardware Components
-motors = animaticsMotors("/dev/ttyUSB0")
+motors = motorController("/dev/ttyUSB0")
 myDevice.addActuator("motors", motors)
 # TODO: Open lines of communication with arduino
 
