@@ -88,6 +88,7 @@ while True:
                     myDevice.netManager.sendAll(str(myDevice.deviceMode))
 
             if myDevice.deviceMode == myDevice.MODE_MANUAL:
+                print "mode is manual; call interpret"
                 manual.interpret(inboundData)
                 continue
 

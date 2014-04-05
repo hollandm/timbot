@@ -44,7 +44,7 @@ class felManualCommandInterpreter:
                 velocity = split[1]
                 seconds = split[2]
 
-                self.stopAt = time.time() + seconds
+                self.stopAt = time.time() + int(seconds)
 
                 self.motors.driveLeft(velocity)
                 self.motors.driveRight(-velocity)
@@ -56,7 +56,7 @@ class felManualCommandInterpreter:
                 return
 
         except:
-            print ""
+            print "Exception"
 
         # TODO: if not a valid command don't do anything
         # TODO: otherwise set lastCommandReceived to be the current time
