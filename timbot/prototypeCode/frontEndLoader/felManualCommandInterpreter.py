@@ -1,0 +1,73 @@
+import time
+import sys
+try:
+    sys.path.insert(0, "../general")
+    from device import device
+    from log import logger
+    print "Successfully Imported Device"
+except ImportError:
+    print "Could not import components, terminating program"
+    sys.exit()
+
+
+##
+# felManualCommandInterpreter
+#
+class felManualCommandInterpreter:
+
+    def __init__(self, deviceInfo):
+
+        self.targetVel = 0
+        self.lastCommandReceived = 0
+
+        self.stopAt = 0
+
+        self.deviceInfo = deviceInfo
+
+        self.motors = deviceInfo.getActuator("motors")
+        return
+
+    ##
+    # interpret
+    #
+    # Description: interpret a given command, if it is valid then execute the command
+    #
+    def interpret(self, command):
+
+        # TODO: determine what commands to use for manual control
+        command = command.lower()
+
+        split = command.split(" ")
+
+        try:
+            if split[0] == "drive":
+                velocity = split[1]
+                seconds = split[2]
+
+                self.stopAt = time.time() + seconds
+
+                self.motors.driveLeft(velocity)
+                self.motors.driveRight(-velocity)
+
+                return
+
+            if split[0] == "rotate":
+                print "rotating"
+                return
+
+        except:
+            print ""
+
+        # TODO: if not a valid command don't do anything
+        # TODO: otherwise set lastCommandReceived to be the current time
+
+        return
+
+    ##
+    # checkTimeout
+    #
+    # Description: if the timeout for a command has been reached then stop movement
+    def checkTimeout(self):
+        if self.stopAt >= time.time():
+            self.motors.stopLeft()
+            self.motors.stopRight()
