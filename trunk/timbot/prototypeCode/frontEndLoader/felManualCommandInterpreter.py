@@ -33,7 +33,7 @@ class felManualCommandInterpreter:
     # Description: interpret a given command, if it is valid then execute the command
     #
     def interpret(self, command):
-
+        print "interpreting"
         # TODO: determine what commands to use for manual control
         command = command.lower()
 
