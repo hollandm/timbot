@@ -48,7 +48,6 @@ class motorController:
         # when we are trying to debug it
         #time.sleep(self.delayTime)
 
-
     ##
     # driveLeft
     #
@@ -63,6 +62,7 @@ class motorController:
         self.write(self.leftAddress)
 
         self.write("VT=" + str(velocity) + " ")
+        print "____"+"VT=" + str(velocity) + " "+"____"
         self.write("G ")
 
         print "driving left"
