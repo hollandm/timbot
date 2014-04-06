@@ -42,22 +42,42 @@ class felManualCommandInterpreter:
 
         try:
             print split
+
+            if split[0] == "reset":
+                self.driving = False
+                self.motors.stopLeft()
+                self.motors.stopRight()
+                self.motors.reset()
+
+            if split[0] == "stop":
+                self.driving = False
+                self.motors.stopLeft()
+                self.motors.stopRight()
+
             if split[0] == "drive":
                 velocity = split[1]
                 seconds = split[2]
 
                 self.driving = True
-                self.stopAt = time.time() + int(seconds)
+                self.stopAt = time.time() + float(seconds)
                 print "Stop at time: " + str(self.stopAt)
                 print "Current time: " + str(time.time())
 
                 self.motors.driveLeft(int(velocity))
-                self.motors.driveRight(int("-" + str(velocity)))
+                self.motors.driveRight(-1*int(velocity))
 
                 return
 
             if split[0] == "rotate":
-                print "rotating"
+                magnitude = int(split[1])*-1
+                seconds = split[2]
+
+                self.driving = True
+                self.stopAt = time.time() + float(seconds)
+
+                self.motors.driveLeft(magnitude)
+                self.motors.driveRight(magnitude)
+
                 return
 
         except IndexError:
