@@ -36,7 +36,13 @@ while(True):
             print "pixel[" + str(mouseCoords.x) + "," + str(mouseCoords.y) + "]:", frame[mouseCoords.x,mouseCoords.y]
 
     dst = cv2.inRange(frame, BEACON_MIN, BEACON_MAX)
+    detector = cv2.SimpleBlobDetector()
+    blobs = detector.detect(dst)
+    if len(blobs) > 1:
+        print "Multiple blobs found."
 
+    if len(blobs) == 1:
+        print "Blob found at (" + str(blobs[0].pt[0]) +"," + str(blobs[0].pt[1]) +")."
 
     # Display the resulting frame
     if mouseCoords.showColor:
