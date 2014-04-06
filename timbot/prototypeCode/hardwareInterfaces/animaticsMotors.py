@@ -42,7 +42,7 @@ class motorController:
     #   command: the command to send to the motors
     def write(self, command):
         command = command.strip() + " "
-        print command
+        # print command
         self.serialPort.write(command)
 
         # Don't do it this way. Otherwise we will forget this is happening
