@@ -21,6 +21,7 @@ class felManualCommandInterpreter:
         self.lastCommandReceived = 0
 
         self.stopAt = 0
+        self.driving = False
 
         self.deviceInfo = deviceInfo
 
@@ -45,10 +46,13 @@ class felManualCommandInterpreter:
                 velocity = split[1]
                 seconds = split[2]
 
+                self.driving = True
                 self.stopAt = time.time() + int(seconds)
+                print "Stop at time: " + str(self.stopAt)
+                print "Current time: " + str(time.time())
 
-                self.motors.driveLeft(str(velocity))
-                self.motors.driveRight("-" + str(velocity))
+                self.motors.driveLeft(int(velocity))
+                self.motors.driveRight(int("-" + str(velocity)))
 
                 return
 
@@ -69,6 +73,9 @@ class felManualCommandInterpreter:
     #
     # Description: if the timeout for a command has been reached then stop movement
     def checkTimeout(self):
-        if self.stopAt >= time.time():
+        # print time.time()
+        if self.stopAt <= time.time() and self.driving == True:
+            print "stopping"
             self.motors.stopLeft()
             self.motors.stopRight()
+            self.driving = False
