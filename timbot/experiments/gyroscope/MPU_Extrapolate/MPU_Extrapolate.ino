@@ -9,6 +9,7 @@
 #include <Wire.h>
 
 #define SAMPLE_AMOUNT 5
+#define GYRO_THRESHOLD 100
 
 //device Hex codes to retrieve various values.
 //codes can be found in the datasheet linked above
@@ -213,18 +214,17 @@ void loop(){
    Serial.print("\t");
    Serial.println(sumArray(averagedAccel));
    */
-  if (abs(data.gyroX) > 100){
+  if (abs(data.gyroX) > GYRO_THRESHOLD){
     data.angleX += data.gyroX;
   }
-  data.angleY += data.gyroY;
-  data.angleZ += data.gyroZ;
+  if (abs(data.gyroY) > GYRO_THRESHOLD){
+    data.angleY += data.gyroY;
+  }
+  if (abs(data.gyroZ) > GYRO_THRESHOLD){
+    data.angleZ += data.gyroZ;
+  }
 
-
-  Serial.print(data.gyroX);
-  Serial.print("\t");
-  Serial.print(data.angleX);
-  Serial.println();
-  delay(50);
+  Serial.write(data.angleZ,DEC);
 
   loopCount++;
 }
