@@ -11,6 +11,10 @@ import serial, time
 #       We could further improve this by detecting redundant packets
 class motorController:
 
+    SPEED_SLOW = 100000
+    SPEED_MEDIUM = 300000
+    SPEED_TURNING = 300000
+
     allAddress = chr(128) + " "
     leftAddress = chr(129) + " "
     rightAddress = chr(130) + " "
