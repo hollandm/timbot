@@ -1,7 +1,7 @@
 import socket
 import struct
 
-
+#TODO: Class comment
 class udpHandshake:
 
     UDP_IP = "224.0.0.1"
@@ -69,7 +69,8 @@ class netManager:
     ##
     # Constructor
     #
-    # Description:
+    # Description: TODO: Fix this
+    # TODO: Remember not everyone has taken networking
     #
     # Parameters:
     #   deviceId - the id of the device
@@ -78,21 +79,26 @@ class netManager:
     def __init__(self, deviceId, isHub, numDevices=0):
 
         hs = udpHandshake(deviceId)
+
         # Is this device the network hub?
         if isHub:
             devicesConnected = 0
 
             while devicesConnected < numDevices:
+                #TODO: Clarify that handshake
                 deviceId, addr = hs.receiveHandshake()
 
                 tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
                 tcpSock.connect((addr, self.TCP_PORT))
+                #TODO: Comment self.connections =
                 self.connections[deviceId] = tcpSock
 
                 devicesConnected += 1
 
+        #Not the hub
         else:
+            #TODO: Explain what this does
             tcpSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcpSock.bind(('', self.TCP_PORT))
             tcpSock.listen(1)
@@ -108,8 +114,10 @@ class netManager:
                     # print inbound
                 except socket.error as msg:
                     continue
+            #End While
 
             inbound[0].setblocking(0)
+            #TODO: Yuck string literals
             self.connections["hub"] = inbound[0]
             tcpSock.close()
 
@@ -127,6 +135,7 @@ class netManager:
     #   deviceId - the device to send the message
     #
     def send(self, msg, deviceId):
+        #TODO: Ponder if we want the ability to send to all devices
         if deviceId is None:
             self.sendAll(msg)
         else:
@@ -150,6 +159,9 @@ class netManager:
     #   are no inbound messages then returns None
     #
     def recv(self):
+        #TODO: Did i get around to telling who sent us data?
+        #TODO: Implement priority
+
         for device in self.connections:
             # print "checking device " + device
             conn = self.connections[device]

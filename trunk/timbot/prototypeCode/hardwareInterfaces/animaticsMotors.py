@@ -9,6 +9,7 @@ import serial, time
 # TODO: regulate the frequency that commands can be sent to the motors.
 #       That should prevent buffer overflows which cause slow response times
 #       We could further improve this by detecting redundant packets
+#  TODO: Find connection programatically
 class motorController:
 
     SPEED_SLOW = 100000
@@ -30,11 +31,11 @@ class motorController:
     def __init__(self, motorPath):
         self.serialPort = serial.Serial(motorPath)
 
-        self.write("ZS ")
-        self.write("MV ")
+        self.write("ZS ")           # Reset
+        self.write("MV ")           # Mode Velocity
         self.write("EIGN(2) ")
         self.write("EIGN(3) ")
-        self.write("ADT=100 ")
+        self.write("ADT=100 ")      # Acceleration
 
     ##
     # write
@@ -44,6 +45,8 @@ class motorController:
     #
     # Parameters:
     #   command: the command to send to the motors
+    #
+    #TODO: Priority Queue
     def write(self, command):
         command = command.strip() + " "
         # print command
