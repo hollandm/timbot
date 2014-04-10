@@ -5,6 +5,7 @@ import sys
 from felAutonomousStateMachine import felAutonomousStateMachine
 from felManualCommandInterpreter import felManualCommandInterpreter
 try:
+    #TODO: This is yucky (Find a better way to do this, if you can...)
     sys.path.insert(0, "../networkProtocol")
     import netProtocol
     print "Successfully Imported Network"

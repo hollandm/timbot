@@ -38,6 +38,7 @@ class device:
         # Initialize the robot in standby mode
         self.deviceMode = self.MODE_STANDBY
 
+        #TODO: Comment this
         self.deviceId = deviceId
 
         self.netManager = None

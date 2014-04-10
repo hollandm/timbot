@@ -79,5 +79,7 @@ while True:
                 else:
                     print "Device Mode: Standby"
 
+    #    TODO: help
+
     except IndexError:
         print "Invalid Command Entered"

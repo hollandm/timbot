@@ -16,7 +16,7 @@ except ImportError:
 class felManualCommandInterpreter:
 
     def __init__(self, deviceInfo):
-
+        #TODO: Comment what these are!
         self.targetVel = 0
         self.lastCommandReceived = 0
 
