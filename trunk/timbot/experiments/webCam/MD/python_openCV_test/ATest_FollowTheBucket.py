@@ -14,7 +14,7 @@ except ImportError:
 class data:
 
     def __init__(self):
-        return 
+        return
 
     x = 0
     y = 0
@@ -38,6 +38,7 @@ name = "Find the Bucket"
 cap = cv2.VideoCapture(0)
 mouseCoords = data()
 motors = motorController("/dev/ttyUSB0")
+
 n = 0
 lost = 0
 while True:
@@ -55,12 +56,13 @@ while True:
     ChangeCommand = n % 4
     speed = motorController.SPEED_SLOW
     if 0 == ChangeCommand:
+        print "Actually Doing Something"
         if mouseCoords.nextCommand == data.LEFT:
-            motors.driveLeft(-1*speed)
-            motors.driveRight(-1*speed)
-        elif mouseCoords.nextCommand == data.RIGHT:
             motors.driveLeft(speed)
             motors.driveRight(speed)
+        elif mouseCoords.nextCommand == data.RIGHT:
+            motors.driveLeft(-1*speed)
+            motors.driveRight(-1*speed)
         elif mouseCoords.nextCommand == data.FORWARD:
             motors.driveLeft(speed)
             motors.driveRight(-1*speed)
@@ -103,8 +105,8 @@ while True:
 
     #If we've been lost for a while, stop.
     if lost > 35:
-        mouseCoords.nextCommand = data.STOP
-
+        # mouseCoords.nextCommand = data.STOP
+        lost += 1
         #print "Blob found at (" + str(blobs[0].pt[0]) +"," + str(blobs[0].pt[1]) +")."
 
 
